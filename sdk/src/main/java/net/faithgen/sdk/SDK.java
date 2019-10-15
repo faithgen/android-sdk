@@ -39,6 +39,7 @@ public class SDK {
 
     /**
      * Use this to set the theme color of the app. You should use a string value from a value.xml file
+     *
      * @return
      */
     public static String getThemeColor() {
@@ -57,19 +58,18 @@ public class SDK {
      * @param apiBaseX      this is the apiBase e.g https://api.faithgen.net/api/ if you pass @null the SDK will use the faithgen baseUrl
      * @param subscriptionX this is the ministry`s subscription level
      */
-    public static void initializeSDK(Context contextX, InputStream inputStreamX, MenuChoice menuChoiceX, String apiBaseX, Subscription subscriptionX) {
+    public static void initializeSDK(Context contextX, InputStream inputStreamX, MenuChoice menuChoiceX, Subscription subscriptionX) {
         initializeConfig(inputStreamX);
         initializeMenu(menuChoiceX);
         initializeContext(contextX);
         initializeSubscription(subscriptionX);
-        initializeApiBase(apiBaseX);
     }
 
     public static Subscription getSubscription() {
         return subscription;
     }
 
-    private static void initializeApiBase(String apiBaseX) {
+    public static void initializeApiBase(String apiBaseX) {
         apiBase = apiBaseX;
     }
 

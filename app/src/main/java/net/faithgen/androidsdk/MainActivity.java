@@ -1,5 +1,6 @@
 package net.faithgen.androidsdk;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, SDK.getThemeColor(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                textView.setTextColor(Color.parseColor(SDK.getThemeColor()));
             }
         });
     }
