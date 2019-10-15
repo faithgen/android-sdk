@@ -12,10 +12,9 @@ import net.faithgen.sdk.utils.Dialogs;
 public abstract class ServerResponse implements ServerResponseListener {
 
     private Context context;
-    private KProgressHUD kProgressHUD;
     private boolean finishActivity;
 
-    abstract void onServerResponse(String serverResponse);
+    public abstract void onServerResponse(String serverResponse);
 
     public void setUpCall(Context context, boolean finishActivity) {
         this.context = context;

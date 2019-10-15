@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import net.faithgen.sdk.SDK;
+import net.faithgen.sdk.http.API;
+import net.faithgen.sdk.http.types.ServerResponse;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +37,12 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(view, SDK.getThemeColor(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 textView.setTextColor(Color.parseColor(SDK.getThemeColor()));
+                API.post(getApplicationContext(), "", null, false, new ServerResponse() {
+                    @Override
+                    public void onServerResponse(String serverResponse) {
+
+                    }
+                });
             }
         });
     }
