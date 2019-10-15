@@ -1,5 +1,6 @@
 package net.faithgen.androidsdk;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 
 import net.faithgen.sdk.SDK;
@@ -9,10 +10,12 @@ import net.faithgen.sdk.menu.MenuChoice;
 import java.io.IOException;
 
 public class TheApp extends Application {
+    @SuppressLint("ResourceType")
     @Override
     public void onCreate() {
         super.onCreate();
         try {
+            SDK.initializeThemeColor(getResources().getString(0 + R.color.colorPrimaryDark));
             SDK.initializeSDK(this, this.getAssets().open("config.json"), MenuChoice.CONTEXTUAL_MENU, null, Subscription.PremiumPlus);
         } catch (IOException e) {
             e.printStackTrace();

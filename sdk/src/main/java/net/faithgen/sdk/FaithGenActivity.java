@@ -1,5 +1,6 @@
 package net.faithgen.sdk;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
@@ -31,6 +32,8 @@ public abstract class FaithGenActivity extends AppCompatActivity implements Tool
 
         toolbar.setPageTitle(getPageTitle());
         toolbar.setOnOptionsClicked(this);
+        if (SDK.getThemeColor() != null)
+            toolbar.getBackButton().setTextColor(Color.parseColor(SDK.getThemeColor()));
     }
 
     public Toolbar getToolbar() {

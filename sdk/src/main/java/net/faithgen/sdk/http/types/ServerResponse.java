@@ -5,7 +5,7 @@ import android.content.Context;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import net.faithgen.sdk.http.ErrorResponse;
-import net.faithgen.sdk.http.ServerResponseListener;
+import net.faithgen.sdk.interfaces.ServerResponseListener;
 import net.faithgen.sdk.utils.Constants;
 import net.faithgen.sdk.utils.Dialogs;
 

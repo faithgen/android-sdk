@@ -17,6 +17,7 @@ public class SDK {
     static Context context;
     static Subscription subscription;
     static String apiBase;
+    static String themeColor;
 
     private static void initializeConfig(InputStream inputStreamX) {
         inputStream = inputStreamX;
@@ -25,6 +26,26 @@ public class SDK {
     private static void initializeMenu(MenuChoice menuChoiceX) {
         menuChoice = menuChoiceX;
         Log.d("seleted_menu", String.valueOf(menuChoiceX));
+    }
+
+    /**
+     * Sets the theme color to be used on the app for toolbar and icons
+     *
+     * @param themeColor_
+     */
+    public static void initializeThemeColor(String themeColor_) {
+        themeColor = themeColor_;
+    }
+
+    /**
+     * Use this to set the theme color of the app. You should use a string value from a value.xml file
+     * @return
+     */
+    public static String getThemeColor() {
+        if (themeColor == null)
+            return themeColor;
+        else
+            return "#" + themeColor.substring(3);
     }
 
     /**

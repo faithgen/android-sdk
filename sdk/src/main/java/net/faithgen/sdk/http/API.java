@@ -141,7 +141,7 @@ public class API {
         }, error -> {
             error.printStackTrace();
             Progress.dismissProgress();
-            errorResponse = ServerResponseListener.makeErrorResponse(error);
+            errorResponse = ErrorResponse.makeErrorResponse(error);
             if (serverResponse != null)
                 serverResponse.onError(errorResponse);
         }) {
@@ -173,7 +173,7 @@ public class API {
             if (serverResponse != null)
                 serverResponse.onResponse(response);
         }, error -> {
-            errorResponse = ServerResponseListener.makeErrorResponse(error);
+            errorResponse = ErrorResponse.makeErrorResponse(error);
             if (serverResponse != null)
                 serverResponse.onError(errorResponse);
         }) {

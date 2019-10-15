@@ -1,7 +1,7 @@
 package net.faithgen.sdk.http.types;
 
 import net.faithgen.sdk.http.ErrorResponse;
-import net.faithgen.sdk.http.ServerResponseListener;
+import net.faithgen.sdk.interfaces.ServerResponseListener;
 
 public abstract class ServerSilentResponse implements ServerResponseListener {
 
