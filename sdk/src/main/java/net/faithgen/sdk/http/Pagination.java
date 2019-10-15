@@ -22,7 +22,7 @@ public class Pagination {
         this.meta = meta;
     }
 
-    class Links {
+    public class Links {
         private String first;
         private String last;
         private String prev;
@@ -61,7 +61,7 @@ public class Pagination {
         }
     }
 
-    class Meta {
+    public class Meta {
         @SerializedName("current_page")
         private int currentPage;
         private int from;
