@@ -1,2 +1,0 @@
-package net.faithgen.androidsdk
-

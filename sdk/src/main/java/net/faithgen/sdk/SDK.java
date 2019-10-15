@@ -29,13 +29,14 @@ public class SDK {
 
     /**
      * This initializes the FaithGen SDK into your current project
-     * @param contextX use the app context,its used for a lot of staff in the SDK
-     * @param inputStreamX use the InputStream of the config.json file. The SDK will make models out of that one
-     * @param menuChoiceX use the menu option you want to use on the app, we prefer you load the menu in your menu settings
-     * @param apiBaseX this is the apiBase e.g https://api.faithgen.net/api/ if you pass @null the SDK will use the faithgen baseUrl
+     *
+     * @param contextX      use the app context,its used for a lot of staff in the SDK
+     * @param inputStreamX  use the InputStream of the config.json file. The SDK will make models out of that one
+     * @param menuChoiceX   use the menu option you want to use on the app, we prefer you load the menu in your menu settings
+     * @param apiBaseX      this is the apiBase e.g https://api.faithgen.net/api/ if you pass @null the SDK will use the faithgen baseUrl
      * @param subscriptionX this is the ministry`s subscription level
      */
-    public static void initializeSDK(Context contextX, InputStream inputStreamX, MenuChoice menuChoiceX, String apiBaseX,  Subscription subscriptionX) {
+    public static void initializeSDK(Context contextX, InputStream inputStreamX, MenuChoice menuChoiceX, String apiBaseX, Subscription subscriptionX) {
         initializeConfig(inputStreamX);
         initializeMenu(menuChoiceX);
         initializeContext(contextX);
@@ -79,7 +80,9 @@ public class SDK {
         SDK.inputStream = inputStream;
     }
 
-    public static Ministry getMinistry() {
+    public static Ministry getMinistry() throws NullPointerException {
+        if (MinistrySingleton.getInstance().getMinistry() == null)
+            throw new NullPointerException("Couldn`t find any ministry, you have to set the proper config file");
         return MinistrySingleton.getInstance().getMinistry();
     }
 
