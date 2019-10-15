@@ -25,7 +25,12 @@ public class API {
 
     private static String getRoute(String route) {
         if (route.contains("http")) return route;
-        else return ROOT_PATH + route;
+        else {
+            if (SDK.getApiBase() != null)
+                return SDK.getApiBase() + route;
+            else
+                return ROOT_PATH + route;
+        }
     }
 
     /**
