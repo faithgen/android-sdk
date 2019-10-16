@@ -16,6 +16,7 @@ public class GSONSingleton {
     public GSONSingleton() {
         gson = new GsonBuilder()
                 .registerTypeAdapterFactory(new FlattenTypeAdapterFactory())
+                .disableHtmlEscaping()
                 .serializeNulls()
                 .create();
     }

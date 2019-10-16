@@ -17,6 +17,7 @@ import android.widget.TextView;
 import net.faithgen.sdk.SDK;
 import net.faithgen.sdk.http.API;
 import net.faithgen.sdk.http.types.ServerResponse;
+import net.faithgen.sdk.utils.Dialogs;
 
 import java.util.HashMap;
 
@@ -40,13 +41,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 textView.setTextColor(Color.parseColor(SDK.getThemeColor()));
-                API.post(MainActivity.this, "messages", params, false, new ServerResponse() {
+                /*API.post(MainActivity.this, "messages", params, false, new ServerResponse() {
                     @Override
                     public void onServerResponse(String serverResponse) {
                         Snackbar.make(view, serverResponse, Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     }
-                });
+                });*/
+                Dialogs.showOkDialog(MainActivity.this, "The message", false);
             }
         });
     }
