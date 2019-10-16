@@ -1,12 +1,8 @@
 package net.faithgen.sdk.utils;
 
-import android.app.Activity;
 import android.content.Context;
 
-import com.gdacciaro.iOSDialog.iOSDialogBuilder;
 import com.kaopiz.kprogresshud.KProgressHUD;
-
-import net.faithgen.sdk.interfaces.DialogListener;
 
 
 public class Progress {

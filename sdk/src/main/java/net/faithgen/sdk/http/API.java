@@ -5,11 +5,13 @@ import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
 import net.faithgen.sdk.SDK;
 import net.faithgen.sdk.http.types.ServerResponse;
 import net.faithgen.sdk.http.types.ServerSilentResponse;
+import net.faithgen.sdk.interfaces.ServerResponseListener;
 import net.faithgen.sdk.singletons.VolleySingleton;
 import net.faithgen.sdk.utils.Progress;
 
@@ -141,9 +143,7 @@ public class API {
         }, error -> {
             error.printStackTrace();
             Progress.dismissProgress();
-            errorResponse = ErrorResponse.makeErrorResponse(error);
-            if (serverResponse != null)
-                serverResponse.onError(errorResponse);
+            processError(error, serverResponse);
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
@@ -159,24 +159,16 @@ public class API {
                 return headers;
             }
         };
-
-        stringRequest.setShouldCache(false);
-        stringRequest.setTag(REQUEST_TAG);
-        VolleySingleton.getInstance().getRequestQueue().add(stringRequest);
+        launchRequest(stringRequest);
     }
 
     private static void makeSilentRequest(int method, String route, HashMap<String, String> params, ServerSilentResponse serverResponse) {
         Log.d("server_access", "makeSilentRequest: " + getRoute(route));
-
         stringRequest = new StringRequest(method, getRoute(route), response -> {
             Log.d("server_response", "onResponse: " + response);
             if (serverResponse != null)
                 serverResponse.onResponse(response);
-        }, error -> {
-            errorResponse = ErrorResponse.makeErrorResponse(error);
-            if (serverResponse != null)
-                serverResponse.onError(errorResponse);
-        }) {
+        }, error -> processError(error, serverResponse)) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 if (params != null)
@@ -191,9 +183,7 @@ public class API {
                 return headers;
             }
         };
-        stringRequest.setShouldCache(false);
-        stringRequest.setTag(REQUEST_TAG);
-        VolleySingleton.getInstance().getRequestQueue().add(stringRequest);
+        launchRequest(stringRequest);
     }
 
     /**
@@ -201,5 +191,17 @@ public class API {
      */
     public void cancelRequests() {
         VolleySingleton.getInstance().getRequestQueue().cancelAll(REQUEST_TAG);
+    }
+
+    private static void processError(VolleyError volleyError, ServerResponseListener responseListener) {
+        errorResponse = ErrorResponse.makeErrorResponse(volleyError);
+        if (responseListener != null)
+            responseListener.onError(errorResponse);
+    }
+
+    private static void launchRequest(StringRequest stringRequest) {
+        stringRequest.setShouldCache(false);
+        stringRequest.setTag(REQUEST_TAG);
+        VolleySingleton.getInstance().getRequestQueue().add(stringRequest);
     }
 }

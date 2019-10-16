@@ -18,9 +18,12 @@ import net.faithgen.sdk.SDK;
 import net.faithgen.sdk.http.API;
 import net.faithgen.sdk.http.types.ServerResponse;
 
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
+    private HashMap<String, String> params;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,17 +33,18 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         setSupportActionBar(toolbar);
 
+        params = new HashMap<>();
+        params.put("limit", "5");
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, SDK.getThemeColor(), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 textView.setTextColor(Color.parseColor(SDK.getThemeColor()));
-                API.post(getApplicationContext(), "", null, false, new ServerResponse() {
+                API.post(MainActivity.this, "messages", params, false, new ServerResponse() {
                     @Override
                     public void onServerResponse(String serverResponse) {
-
+                        Snackbar.make(view, serverResponse, Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
                     }
                 });
             }

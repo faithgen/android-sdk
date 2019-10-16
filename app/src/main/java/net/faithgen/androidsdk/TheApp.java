@@ -16,7 +16,7 @@ public class TheApp extends Application {
         super.onCreate();
         try {
             SDK.initializeThemeColor(getResources().getString(R.color.colorPrimaryDark));
-            SDK.initializeSDK(this, this.getAssets().open("config.json"), MenuChoice.CONTEXTUAL_MENU, null, Subscription.PremiumPlus);
+            SDK.initializeSDK(this, this.getAssets().open("config.json"), MenuChoice.CONTEXTUAL_MENU, Subscription.PremiumPlus);
         } catch (IOException e) {
             e.printStackTrace();
         }
