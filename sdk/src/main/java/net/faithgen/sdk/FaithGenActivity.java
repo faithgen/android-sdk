@@ -90,16 +90,8 @@ public abstract class FaithGenActivity extends AppCompatActivity implements Tool
         if (onOptionsClicked != null)
             onOptionsClicked.optionsClicked(view);
     }
-/*
-    public void optionClicked() {
-        if (optionClicked != null) {
-            toolbar.setHasOptions(true);
-            optionClicked.optionsClicked(toolbar);
-        }
+
+    public int getPageIcon() {
+        return R.drawable.ic_android_blue_24dp;
     }
-
-    public void optionsClicked(int icon) {
-
-        optionClicked();
-    }*/
 }
