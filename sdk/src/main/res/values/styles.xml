@@ -17,6 +17,4 @@
         <item name="android:padding">@dimen/dimen10</item>
         <item name="android:textSize">@dimen/toolbar_text_height</item>
     </style>
-
-    <dimen name="dimen10">10dp</dimen>
 </resources>

@@ -15,13 +15,16 @@ import net.faithgen.sdk.interfaces.ServerResponseListener;
 import net.faithgen.sdk.singletons.VolleySingleton;
 import net.faithgen.sdk.utils.Progress;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class API {
     private static final String API_KEY = "API-KEY";
     private static final String REQUEST_TAG = "Request_XTag";
-    private static String ROOT_PATH = "http://192.168.8.100:8001/app/";
+    private static String ROOT_PATH = "http://192.168.8.100:8001/api/";
     private static StringRequest stringRequest;
     private static ErrorResponse errorResponse;
 
@@ -69,7 +72,7 @@ public class API {
      * @param serverResponse the one to return server data for further processing on success
      */
     public static void get(Context context, String route, HashMap<String, String> params, boolean finishOnFail, ServerResponse serverResponse) {
-        makeRequest(context, Request.Method.GET, route, params, finishOnFail, serverResponse);
+        makeRequest(context, Request.Method.GET, trimUrl(route, params), params, finishOnFail, serverResponse);
     }
 
     /**
@@ -80,7 +83,7 @@ public class API {
      * @param serverSilentResponse the callback to run when it fails
      */
     public static void silentGet(String route, HashMap<String, String> params, ServerSilentResponse serverSilentResponse) {
-        makeSilentRequest(Request.Method.GET, route, params, serverSilentResponse);
+        makeSilentRequest(Request.Method.GET, trimUrl(route, params), params, serverSilentResponse);
     }
 
     /**
@@ -117,7 +120,7 @@ public class API {
      * @param serverResponse the one to return server data for further processing on success
      */
     public static void put(Context context, String route, HashMap<String, String> params, boolean finishOnFail, ServerResponse serverResponse) {
-        makeRequest(context, Request.Method.PUT, route, params, finishOnFail, serverResponse);
+        makeRequest(context, Request.Method.PUT, trimUrl(route, params), params, finishOnFail, serverResponse);
     }
 
     /**
@@ -128,7 +131,7 @@ public class API {
      * @param serverSilentResponse
      */
     public static void silentPut(String route, HashMap<String, String> params, ServerSilentResponse serverSilentResponse) {
-        makeSilentRequest(Request.Method.PUT, route, params, serverSilentResponse);
+        makeSilentRequest(Request.Method.PUT, trimUrl(route, params), params, serverSilentResponse);
     }
 
     private static void makeRequest(Context context, int method, String route, HashMap<String, String> params, boolean finishOnFail, ServerResponse serverResponse) {
@@ -203,5 +206,29 @@ public class API {
         stringRequest.setShouldCache(false);
         stringRequest.setTag(REQUEST_TAG);
         VolleySingleton.getInstance().getRequestQueue().add(stringRequest);
+    }
+
+    private static String encodeParams(HashMap<String, String> params) {
+        Iterator iterator = params.entrySet().iterator();
+        String encodedQueries = "";
+        while (iterator.hasNext()) {
+            Map.Entry entry = (Map.Entry) iterator.next();
+            try {
+                encodedQueries += "&" + URLEncoder.encode((String) entry.getKey(), "UTF-8") + "=" + URLEncoder.encode((String) entry.getValue(), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            iterator.remove();
+        }
+        return "?" + encodedQueries.substring(1);
+    }
+
+    private static String trimUrl(String url, HashMap<String, String> params) {
+        int paramsIndex = url.indexOf("?");
+        if (params == null) return url;
+        else if(paramsIndex == -1)
+            return url + encodeParams(params);
+        else
+            return url.substring(0, paramsIndex) + encodeParams(params);
     }
 }

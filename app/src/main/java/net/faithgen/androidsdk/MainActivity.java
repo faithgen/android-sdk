@@ -41,14 +41,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 textView.setTextColor(Color.parseColor(SDK.getThemeColor()));
-                /*API.post(MainActivity.this, "messages", params, false, new ServerResponse() {
-                    @Override
-                    public void onServerResponse(String serverResponse) {
-                        Snackbar.make(view, serverResponse, Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                });*/
-                Dialogs.showOkDialog(MainActivity.this, "The message", false);
+                HashMap<String, String> params = new HashMap<>();
+                params.put("first_char", "this is the params");
+                params.put("second params", "2");
+                API.get(MainActivity.this, "https://theroute", params, false, null);
             }
         });
     }

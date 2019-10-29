@@ -55,7 +55,6 @@ public class SDK {
      * @param contextX      use the app context,its used for a lot of staff in the SDK
      * @param inputStreamX  use the InputStream of the config.json file. The SDK will make models out of that one
      * @param menuChoiceX   use the menu option you want to use on the app, we prefer you load the menu in your menu settings
-     * @param apiBaseX
      * @param subscriptionX this is the ministry`s subscription level
      */
     public static void initializeSDK(Context contextX, InputStream inputStreamX, MenuChoice menuChoiceX, Subscription subscriptionX) {
@@ -71,6 +70,7 @@ public class SDK {
 
     /**
      * Initiliaze API bas path
+     *
      * @param apiBaseX this is the apiBase e.g https://api.faithgen.net/api/ if you pass @null the SDK will use the faithgen baseUrl
      */
     public static void initializeApiBase(String apiBaseX) {
