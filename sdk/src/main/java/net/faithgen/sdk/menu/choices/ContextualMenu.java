@@ -42,7 +42,7 @@ public class ContextualMenu extends Menu {
         menuObjects = new ArrayList<>();
 
         closeMenu = new MenuObject();
-        closeMenu.setResourceValue(R.drawable.close);
+        closeMenu.setResourceValue(R.drawable.ic_close_blue);
 
         menuObjects.add(closeMenu);
         for (MenuItem menuItem :
@@ -55,14 +55,11 @@ public class ContextualMenu extends Menu {
         menuParams.setClosableOutside(false);
         contextMenuDialogFragment = ContextMenuDialogFragment.newInstance(menuParams);
         contextMenuDialogFragment.setMenuItemClickListener((view, integer) -> {
-            switch (integer) {
-                case 0:
-                    contextMenuDialogFragment.dismiss();
-                    break;
-                default:
-                    if (getMenuListener() != null)
-                        getMenuListener().itemClick(null, integer - 1);
-                    break;
+            if (integer == 0) {
+                contextMenuDialogFragment.dismiss();
+            } else {
+                if (getMenuListener() != null)
+                    getMenuListener().itemClick(null, integer - 1);
             }
             return null;
         });
