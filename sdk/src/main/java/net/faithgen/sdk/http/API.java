@@ -225,7 +225,7 @@ public class API {
 
     private static String trimUrl(String url, HashMap<String, String> params) {
         int paramsIndex = url.indexOf("?");
-        if (params == null) return url;
+        if (params == null || url.contains("page=")) return url;
         else if(paramsIndex == -1)
             return url + encodeParams(params);
         else
