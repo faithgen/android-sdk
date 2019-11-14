@@ -7,4 +7,5 @@ public class Constants {
     public static final String SERVER_RESPONSE = "Server response!";
     public static final String YES = "Yes";
     public static final String NOPE = "Nope!";
+    public static final String SHARE_WITH = "Share via";
 }
