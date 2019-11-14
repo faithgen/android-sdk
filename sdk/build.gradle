@@ -39,16 +39,16 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.github.innoflash:iOSViews:6b8527d4b6' //iOSViews (custom)
-    implementation 'com.google.code.gson:gson:2.8.5' //data serialization
-    implementation 'org.itishka.gson-flatten:gson-flatten:0.8.1' //GSON helper
-    implementation 'com.github.Yalantis:Context-Menu.Android:1.1.4' //our nice dropdown menu
-    implementation 'com.itlgl:iosdialog:1.0.1'
-    implementation "androidx.core:core-ktx:+"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" //iOS bottom menu
-    implementation 'com.android.volley:volley:1.1.1' //http calls library
-    implementation 'com.kaopiz:kprogresshud:1.2.0' //iOS loading lib
-    implementation 'com.gdacciaro:iosdialog:1.0.3' //iOS like dialogs
+    api 'com.github.innoflash:iOSViews:6b8527d4b6' //iOSViews (custom)
+    api 'com.google.code.gson:gson:2.8.5' //data serialization
+    api 'org.itishka.gson-flatten:gson-flatten:0.8.1' //GSON helper
+    api 'com.github.Yalantis:Context-Menu.Android:1.1.4' //our nice dropdown menu
+    api 'com.itlgl:iosdialog:1.0.1'
+    api "androidx.core:core-ktx:+"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version" //iOS bottom menu
+    api 'com.android.volley:volley:1.1.1' //http calls library
+    api 'com.kaopiz:kprogresshud:1.2.0' //iOS loading lib
+    api 'com.gdacciaro:iosdialog:1.0.3' //iOS like dialogs
 }
 repositories {
     mavenCentral()
