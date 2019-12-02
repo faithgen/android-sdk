@@ -8,6 +8,7 @@ public class Avatar {
     private String _50;
     private String _100;
     private String original;
+    private String thumb;
 
     public String get_50() {
         return _50;
@@ -31,5 +32,13 @@ public class Avatar {
 
     public void setOriginal(String original) {
         this.original = original;
+    }
+
+    public String getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(String thumb) {
+        this.thumb = thumb;
     }
 }
