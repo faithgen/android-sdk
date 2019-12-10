@@ -22,6 +22,15 @@ public class Ministry {
     private List<String> phones;
     @Flatten("contact::emails")
     private List<String> emails;
+    private List<Service> services;
+
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public void setServices(List<Service> services) {
+        this.services = services;
+    }
 
     public String getAccount() {
         return account;
