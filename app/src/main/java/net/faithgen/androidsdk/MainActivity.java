@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,9 +14,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import net.faithgen.sdk.SDK;
-import net.faithgen.sdk.http.API;
-import net.faithgen.sdk.http.types.ServerResponse;
-import net.faithgen.sdk.utils.Dialogs;
+import net.faithgen.sdk.enums.CommentsDisplay;
+import net.faithgen.sdk.comments.CommentsSettings;
 
 import java.util.HashMap;
 
@@ -44,7 +42,14 @@ public class MainActivity extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("first_char", "this is the params");
                 params.put("second params", "2");
-                API.get(MainActivity.this, "https://theroute", params, false, null);
+              //  API.get(MainActivity.this, "https://theroute", params, false, null);
+
+                SDK.openComments(MainActivity.this, new CommentsSettings.Builder()
+                        .setCategory("sermons/")
+                        .setItemId("-5-3e4c7f160-b5191986fb06-be8fe23ad2")
+                        .setTitle("Sernon title")
+                        .setCommentsDisplay(CommentsDisplay.DIALOG)
+                        .build());
             }
         });
     }

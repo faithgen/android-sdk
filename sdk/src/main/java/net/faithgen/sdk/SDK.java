@@ -1,10 +1,17 @@
 package net.faithgen.sdk;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import net.faithgen.sdk.comments.CommentsActivity;
+import net.faithgen.sdk.comments.CommentsDialog;
+import net.faithgen.sdk.enums.CommentsDisplay;
 import net.faithgen.sdk.enums.Subscription;
 import net.faithgen.sdk.menu.MenuChoice;
+import net.faithgen.sdk.comments.CommentsSettings;
 import net.faithgen.sdk.models.Config;
 import net.faithgen.sdk.models.Ministry;
 import net.faithgen.sdk.models.User;
@@ -122,4 +129,14 @@ public class SDK {
     public static Config getConfig() {
         return MinistrySingleton.getInstance().getConfig();
     }
+
+    public static void openComments(AppCompatActivity activity, CommentsSettings commentsSettings){
+        if(commentsSettings.getCommentsDisplay().equals(CommentsDisplay.DIALOG)){
+            CommentsDialog commentsDialog = new CommentsDialog(activity, commentsSettings);
+            commentsDialog.show(activity.getSupportFragmentManager(), CommentsDialog.TAG);
+        }else{
+            Intent intent = new Intent(activity, CommentsActivity.class);
+            activity.startActivity(intent);
+        }
+    };
 }
