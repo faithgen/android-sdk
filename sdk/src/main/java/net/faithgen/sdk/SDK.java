@@ -7,6 +7,7 @@ import net.faithgen.sdk.enums.Subscription;
 import net.faithgen.sdk.menu.MenuChoice;
 import net.faithgen.sdk.models.Config;
 import net.faithgen.sdk.models.Ministry;
+import net.faithgen.sdk.models.User;
 import net.faithgen.sdk.singletons.MinistrySingleton;
 
 import java.io.InputStream;
@@ -18,6 +19,9 @@ public class SDK {
     static Subscription subscription;
     static String apiBase;
     static String themeColor;
+    static User user;
+
+    private static void initializeUser(User userX){ user = userX;}
 
     private static void initializeConfig(InputStream inputStreamX) {
         inputStream = inputStreamX;
@@ -47,6 +51,10 @@ public class SDK {
             return themeColor;
         else
             return "#" + themeColor.substring(3);
+    }
+
+    public static User getUser() {
+        return user;
     }
 
     /**

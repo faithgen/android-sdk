@@ -14,7 +14,7 @@ public class Ministry {
     private String account;
     @SerializedName("api_key")
     private String apiKey;
-    private boolean actvive;
+    private boolean active;
     private Location location;
     private Links links;
     private Statement statement;
@@ -80,12 +80,12 @@ public class Ministry {
         this.apiKey = apiKey;
     }
 
-    public boolean isActvive() {
-        return actvive;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setActvive(boolean actvive) {
-        this.actvive = actvive;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Location getLocation() {

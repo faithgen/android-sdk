@@ -12,7 +12,10 @@ import net.faithgen.sdk.SDK;
 import net.faithgen.sdk.http.types.ServerResponse;
 import net.faithgen.sdk.http.types.ServerSilentResponse;
 import net.faithgen.sdk.interfaces.ServerResponseListener;
+import net.faithgen.sdk.models.User;
+import net.faithgen.sdk.singletons.GSONSingleton;
 import net.faithgen.sdk.singletons.VolleySingleton;
+import net.faithgen.sdk.utils.Constants;
 import net.faithgen.sdk.utils.Progress;
 
 import java.io.UnsupportedEncodingException;
@@ -22,9 +25,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class API {
-    private static final String API_KEY = "API-KEY";
+    private static final String API_KEY = "x-api-key";
+    private static final String USER_KEY = "x-user-key";
     private static final String REQUEST_TAG = "Request_XTag";
-    private static String ROOT_PATH = "http://192.168.8.100:8001/api/";
+    private static String ROOT_PATH = "http://192.168.8.105:8001/api/";
     private static StringRequest stringRequest;
     private static ErrorResponse errorResponse;
 
@@ -159,7 +163,7 @@ public class API {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put(API_KEY, SDK.getMinistry().getApiKey());
-                return headers;
+                return addUserToHeaders(headers);
             }
         };
         launchRequest(stringRequest);
@@ -183,10 +187,15 @@ public class API {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<>();
                 headers.put(API_KEY, SDK.getMinistry().getApiKey());
-                return headers;
+                return addUserToHeaders(headers);
             }
         };
         launchRequest(stringRequest);
+    }
+
+    private static HashMap<String, String> addUserToHeaders(HashMap<String, String> headers){
+       if(SDK.getUser() != null) headers.put(USER_KEY, SDK.getUser().getId());
+        return headers;
     }
 
     /**
