@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,10 +19,13 @@ import net.faithgen.sdk.http.API;
 import net.faithgen.sdk.http.ErrorResponse;
 import net.faithgen.sdk.http.Pagination;
 import net.faithgen.sdk.http.types.ServerResponse;
+import net.faithgen.sdk.models.Comment;
 import net.faithgen.sdk.singletons.GSONSingleton;
 import net.faithgen.sdk.utils.Constants;
 import net.faithgen.sdk.utils.Dialogs;
 import net.innoflash.iosview.swipelib.SwipeRefreshLayout;
+
+import java.util.List;
 
 public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private Context context;
@@ -35,6 +39,8 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView commentsView;
     private Pagination pagination;
     private CommentsResponse commentsResponse;
+    private CommentsAdapter adapter;
+    private List<Comment> comments;
 
     public CommentsUtil(Context context, CommentsSettings commentsSettings) {
         this.context = context;
@@ -51,6 +57,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         commentsView = view.findViewById(R.id.commentsView);
 
         swipeRefreshLayout.setPullPosition(Gravity.TOP);
+        commentsView.setLayoutManager(new LinearLayoutManager(context));
 
         initViewsEvents();
         initFooterLayouts();
@@ -87,6 +94,16 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private void populateComments(String serverResponse) {
         pagination = GSONSingleton.getInstance().getGson().fromJson(serverResponse, Pagination.class);
         commentsResponse = GSONSingleton.getInstance().getGson().fromJson(serverResponse, CommentsResponse.class);
+        if(comments == null || comments.size() == 0){
+            comments = commentsResponse.getComments();
+            adapter = new CommentsAdapter(context, comments);
+            commentsView.setAdapter(adapter);
+            commentsView.smoothScrollToPosition(comments.size() - 1);
+        }else{
+            comments.addAll(0, commentsResponse.getComments());
+            adapter.notifyDataSetChanged();
+            commentsView.smoothScrollToPosition(commentsResponse.getComments().size() + 1);
+        }
     }
 
     private void signInProfile() {
@@ -102,6 +119,6 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         if(pagination == null || pagination.getLinks().getNext() == null){
             swipeRefreshLayout.setRefreshing(false);
             Toast.makeText(context, Constants.REACHED_END, Toast.LENGTH_SHORT).show();
-        }
+        }else loadComments(pagination.getLinks().getNext());
     }
 }

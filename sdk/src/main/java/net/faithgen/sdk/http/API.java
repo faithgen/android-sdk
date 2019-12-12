@@ -215,7 +215,7 @@ public class API {
         VolleySingleton.getInstance().getRequestQueue().add(stringRequest);
     }
 
-    private static String encodeParams(HashMap<String, String> params) {
+    private static String encodeParams(HashMap<String, String> params, boolean hasPage) {
         Iterator iterator = params.entrySet().iterator();
         String encodedQueries = "";
         while (iterator.hasNext()) {
@@ -227,15 +227,16 @@ public class API {
             }
             iterator.remove();
         }
-        return "?" + encodedQueries.substring(1);
+        return (hasPage ? "&": "?") + encodedQueries.substring(1);
     }
 
     private static String trimUrl(String url, HashMap<String, String> params) {
         int paramsIndex = url.indexOf("?");
-        if (params == null || url.contains("page=")) return url;
+        if (params == null) return url;
+        if(url.contains("page=")) return url + encodeParams(params, true);
         else if(paramsIndex == -1)
-            return url + encodeParams(params);
+            return url + encodeParams(params, false);
         else
-            return url.substring(0, paramsIndex) + encodeParams(params);
+            return url.substring(0, paramsIndex) + encodeParams(params, false);
     }
 }

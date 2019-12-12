@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CommentView">
+        <attr name="user_name" format="string" />
+        <attr name="user_comment" format="string" />
+        <attr name="comment_time" format="string" />
+        <attr name="user_image" format="reference"/>
+        <attr name="user_id_admin" format="boolean"/>
+    </declare-styleable>
+</resources>

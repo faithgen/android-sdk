@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                         .setCategory("sermons/")
                         .setItemId("-5-3e4c7f160-b5191986fb06-be8fe23ad2")
                         .setTitle("Sernon title")
+                        .setLimit(2)
                         .setCommentsDisplay(CommentsDisplay.DIALOG)
                         .build());
             }

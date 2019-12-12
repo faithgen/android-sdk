@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/margin10"
+    android:paddingTop="@dimen/dimen5"
+    android:layout_marginBottom="@dimen/dimen3"
+    android:paddingRight="@dimen/toolbar_height">
+
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-smallcaps"
+        android:text="@string/loading" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="@dimen/dimen3"
+            android:layout_marginBottom="@dimen/dimen3"
+            android:src="@drawable/commenter"
+            app:civ_border_color="@color/ios_blue"
+            app:civ_border_width="1dp" />
+        <LinearLayout
+            android:id="@+id/comment_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/chat_background"
+            android:orientation="vertical"
+            android:padding="@dimen/dimen7">
+
+            <TextView
+                android:id="@+id/user_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/loading" />
+
+            <TextView
+                android:id="@+id/comment_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-smallcaps"
+                android:paddingTop="@dimen/dimen7"
+                android:singleLine="true"
+                android:text="@string/loading"
+                android:textColor="@color/ios_blue" />
+
+        </LinearLayout>
+    </LinearLayout>
+
 
 </LinearLayout>
