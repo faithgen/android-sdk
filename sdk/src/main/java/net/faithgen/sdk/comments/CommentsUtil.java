@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import net.faithgen.sdk.SDK;
 import net.faithgen.sdk.http.API;
 import net.faithgen.sdk.http.ErrorResponse;
 import net.faithgen.sdk.http.Pagination;
+import net.faithgen.sdk.http.Response;
 import net.faithgen.sdk.http.types.ServerResponse;
 import net.faithgen.sdk.models.Comment;
 import net.faithgen.sdk.singletons.GSONSingleton;
@@ -25,6 +27,7 @@ import net.faithgen.sdk.utils.Constants;
 import net.faithgen.sdk.utils.Dialogs;
 import net.innoflash.iosview.swipelib.SwipeRefreshLayout;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
@@ -34,6 +37,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private RelativeLayout commentLayout;
     private Button signIn;
     private FloatingActionButton commentFAB;
+    private TextView noComments;
     private EditText commentField;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView commentsView;
@@ -41,6 +45,8 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private CommentsResponse commentsResponse;
     private CommentsAdapter adapter;
     private List<Comment> comments;
+    private HashMap<String, String> params;
+    private Response response;
 
     public List<Comment> getComments() {
         return comments;
@@ -59,6 +65,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         commentField = view.findViewById(R.id.comment_field);
         swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
         commentsView = view.findViewById(R.id.commentsView);
+        noComments = view.findViewById(R.id.no_comments);
 
         swipeRefreshLayout.setPullPosition(Gravity.TOP);
         commentsView.setLayoutManager(new LinearLayoutManager(context));
@@ -108,14 +115,48 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
             adapter.notifyDataSetChanged();
             commentsView.smoothScrollToPosition(commentsResponse.getComments().size() + 1);
         }
+
+        initNoComments();
+    }
+
+    private void initNoComments() {
+        if(comments == null || comments.size() == 0) noComments.setVisibility(View.VISIBLE);
+        else noComments.setVisibility(View.GONE);
     }
 
     private void signInProfile() {
-
+        Toast.makeText(context, commentsSettings.getFieldName(), Toast.LENGTH_SHORT).show();
     }
 
     private void sendComment() {
+        if(commentField.getText().toString().isEmpty()) Dialogs.showOkDialog(context, Constants.BLANK_COMMENT, false);
+        else{
+            params = new HashMap<>();
+            params.put(commentsSettings.getFieldName(), commentsSettings.getItemId());
+            params.put(Constants.COMMENT, commentField.getText().toString());
+            API.post(context, commentsSettings.getCategory() + "comment", params, false, new ServerResponse() {
+                @Override
+                public void onServerResponse(String serverResponse) {
+                    response = GSONSingleton.getInstance().getGson().fromJson(serverResponse, Response.class);
+                    if(response.isSuccess()){
+                        processSuccessfulRequest(response);
+                    }else Dialogs.showOkDialog(context, response.getMessage(), false);
+                }
 
+                @Override
+                public void onResponse(String serverResponse) {
+                    super.onResponse(serverResponse);
+                }
+            });
+        }
+    }
+
+    private void processSuccessfulRequest(Response response) {
+        commentField.setText("");
+        Toast.makeText(context, response.getMessage(), Toast.LENGTH_SHORT).show();
+        comments.add(response.getComment());
+        commentsView.smoothScrollToPosition(comments.size()-1);
+        initNoComments();
     }
 
     @Override

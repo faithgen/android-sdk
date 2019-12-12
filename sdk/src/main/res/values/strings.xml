@@ -5,4 +5,5 @@
     <string name="no_user">Please sign in if you want to pass your comments.</string>
     <string name="sign_in">Sign In</string>
     <string name="type_here">Type here</string>
+    <string name="no_comments">This item does not have any comments as yet!</string>
 </resources>

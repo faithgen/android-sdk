@@ -11,5 +11,6 @@ public class Constants {
     public static final String COMMENTS = "Comments";
     public static final String REACHED_END = "You have seen all comments";
     public static final String SETTINGS = "_settings";
-    public static final String TITLE = "_title";
+    public static final String BLANK_COMMENT = "You comment is blank!";
+    public static final String COMMENT = "comment";
 }

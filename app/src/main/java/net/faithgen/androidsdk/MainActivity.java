@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                         .setItemId("-5-3e4c7f160-b5191986fb06-be8fe23ad2")
                         .setTitle("Sermon title")
                         .setLimit(2)
-                        .setCommentsDisplay(CommentsDisplay.ACTIVITY)
+                        .setCommentsDisplay(CommentsDisplay.DIALOG)
                         .build());
             }
         });

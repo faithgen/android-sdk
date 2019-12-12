@@ -28,6 +28,10 @@ public class CommentsSettings {
         return limit;
     }
 
+    public String getFieldName() {
+        return category.substring(0, category.indexOf("s/")) + "_id";
+    }
+
     public String getCommentsRoute() {
         return getCategory() + "comments/" + getItemId();
     }

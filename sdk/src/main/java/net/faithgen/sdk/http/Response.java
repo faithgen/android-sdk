@@ -1,9 +1,16 @@
 package net.faithgen.sdk.http;
 
+import net.faithgen.sdk.models.Comment;
+
 public class Response<T> {
     private T data;
     private String message;
     private boolean success;
+    private Comment comment;
+
+    public Comment getComment() {
+        return comment;
+    }
 
     public String getMessage() {
         return message;
