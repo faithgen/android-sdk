@@ -21,6 +21,10 @@ public abstract class FaithGenActivity extends AppCompatActivity implements Tool
     private View rootView;
     private View view;
 
+    protected View getView() {
+        return view;
+    }
+
     public abstract String getPageTitle();
 
     @Override

@@ -12,14 +12,17 @@ import android.view.View;
 
 import net.faithgen.sdk.FaithGenActivity;
 import net.faithgen.sdk.R;
+import net.faithgen.sdk.singletons.GSONSingleton;
+import net.faithgen.sdk.utils.Constants;
 
 public class CommentsActivity extends FaithGenActivity {
 
     private CommentsUtil commentsUtil;
+    private CommentsSettings commentsSettings;
 
     @Override
     public String getPageTitle() {
-        return "Comments";
+        return "";
     }
 
     @Override
@@ -27,14 +30,17 @@ public class CommentsActivity extends FaithGenActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_comments);
 
-       /* FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        commentsSettings = GSONSingleton.getInstance().getGson().fromJson(getIntent().getStringExtra(Constants.SETTINGS), CommentsSettings.class);
+        commentsUtil = new CommentsUtil(this, commentsSettings);
+
+        commentsUtil.initViews(getView());
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getToolbar().setPageTitle(commentsSettings.getTitle());
+        if(commentsUtil.getComments() == null)
+            commentsUtil.loadComments(commentsSettings.getCommentsRoute());
+    }
 }

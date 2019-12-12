@@ -10,4 +10,6 @@ public class Constants {
     public static final String SHARE_WITH = "Share via";
     public static final String COMMENTS = "Comments";
     public static final String REACHED_END = "You have seen all comments";
+    public static final String SETTINGS = "_settings";
+    public static final String TITLE = "_title";
 }

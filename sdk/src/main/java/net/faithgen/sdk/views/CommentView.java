@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.squareup.picasso.Picasso;
 
 import net.faithgen.sdk.R;
+import net.faithgen.sdk.SDK;
 import net.faithgen.sdk.models.Comment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -79,6 +80,7 @@ public class CommentView extends LinearLayout {
     public String getTime() {
         return time;
     }
+
     public void setUserName(String userName) {
         this.userName = userName;
         getUserNameView().setText(userName);
@@ -108,7 +110,15 @@ public class CommentView extends LinearLayout {
 
     public void setComment(Comment comment) {
         this.comment = comment;
-        setUserName(comment.getCreator().getName());
+        if (comment.getCreator().isAdmin())
+            commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_admin_background));
+
+        if (SDK.getUser() == null)
+            setUserName(comment.getCreator().getName());
+        else if(SDK.getUser().getId().equals(comment.getCreator().getId())){
+            setUserName(comment.getCreator().getName() + " (you)");
+            commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_admin_background));
+        }
         setUserComment(comment.getComment());
         setTime(comment.getDate().getApprox());
         Picasso.get()
@@ -116,7 +126,5 @@ public class CommentView extends LinearLayout {
                 .error(R.drawable.commenter)
                 .placeholder(R.drawable.commenter)
                 .into(getCircularImageView());
-
-        if(comment.getCreator().isAdmin()) commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_admin_background));
     }
 }

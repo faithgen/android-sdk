@@ -15,7 +15,9 @@ import net.faithgen.sdk.comments.CommentsSettings;
 import net.faithgen.sdk.models.Config;
 import net.faithgen.sdk.models.Ministry;
 import net.faithgen.sdk.models.User;
+import net.faithgen.sdk.singletons.GSONSingleton;
 import net.faithgen.sdk.singletons.MinistrySingleton;
+import net.faithgen.sdk.utils.Constants;
 
 import java.io.InputStream;
 
@@ -136,6 +138,8 @@ public class SDK {
             commentsDialog.show(activity.getSupportFragmentManager(), CommentsDialog.TAG);
         }else{
             Intent intent = new Intent(activity, CommentsActivity.class);
+           // intent.putExtra(Constants.TITLE, commentsSettings.getTitle());
+            intent.putExtra(Constants.SETTINGS, GSONSingleton.getInstance().getGson().toJson(commentsSettings));
             activity.startActivity(intent);
         }
     };

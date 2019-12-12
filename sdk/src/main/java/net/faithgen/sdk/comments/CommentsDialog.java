@@ -43,7 +43,8 @@ public class CommentsDialog extends DialogFullScreen {
     public void onStart() {
         super.onStart();
         dialogToolbar.setTitle(commentsSettings.getTitle());
-        commentsUtil.loadComments(commentsSettings.getCommentsRoute());
+        if (commentsUtil.getComments() == null)
+            commentsUtil.loadComments(commentsSettings.getCommentsRoute());
         //todo load comments
     }
 }

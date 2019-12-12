@@ -42,6 +42,10 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private CommentsAdapter adapter;
     private List<Comment> comments;
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
     public CommentsUtil(Context context, CommentsSettings commentsSettings) {
         this.context = context;
         this.commentsSettings = commentsSettings;
