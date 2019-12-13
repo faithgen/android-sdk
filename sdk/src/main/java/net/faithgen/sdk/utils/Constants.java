@@ -13,4 +13,7 @@ public class Constants {
     public static final String SETTINGS = "_settings";
     public static final String BLANK_COMMENT = "You comment is blank!";
     public static final String COMMENT = "comment";
+    public static final String MENU_OPTION = "_menu_option";
+    public static final String SUBSCRIPTION_LEVEL = "_subscription_level";
+    public static final String USER = "_user";
 }

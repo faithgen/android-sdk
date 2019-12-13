@@ -21,6 +21,8 @@ import net.faithgen.sdk.utils.Constants;
 
 import java.io.InputStream;
 
+import nouri.in.goodprefslib.GoodPrefs;
+
 public class SDK {
     static InputStream inputStream;
     static MenuChoice menuChoice;
@@ -36,17 +38,12 @@ public class SDK {
         inputStream = inputStreamX;
     }
 
-    private static void initializeMenu(MenuChoice menuChoiceX) {
-        menuChoice = menuChoiceX;
-        Log.d("seleted_menu", String.valueOf(menuChoiceX));
-    }
-
     /**
      * Sets the theme color to be used on the app for toolbar and icons
      *
      * @param themeColor_
      */
-    public static void initializeThemeColor(String themeColor_) {
+    private static void initializeThemeColor(String themeColor_) {
         themeColor = themeColor_;
     }
 
@@ -56,13 +53,13 @@ public class SDK {
      * @return
      */
     public static String getThemeColor() {
-        if (themeColor == null)
-            return themeColor;
+        if (themeColor == null) return null;
         else
             return "#" + themeColor.substring(3);
     }
 
     public static User getUser() {
+        user = GoodPrefs.getInstance().getObject(Constants.USER, User.class);
         return user;
     }
 
@@ -71,17 +68,18 @@ public class SDK {
      *
      * @param contextX      use the app context,its used for a lot of staff in the SDK
      * @param inputStreamX  use the InputStream of the config.json file. The SDK will make models out of that one
-     * @param menuChoiceX   use the menu option you want to use on the app, we prefer you load the menu in your menu settings
-     * @param subscriptionX this is the ministry`s subscription level
+     * @param themeColor_ sets the themeColor
      */
-    public static void initializeSDK(Context contextX, InputStream inputStreamX, MenuChoice menuChoiceX, Subscription subscriptionX) {
+    public static void initializeSDK(Context contextX, InputStream inputStreamX, String themeColor_) {
         initializeConfig(inputStreamX);
-        initializeMenu(menuChoiceX);
         initializeContext(contextX);
-        initializeSubscription(subscriptionX);
+        initializeThemeColor(themeColor_);
     }
 
     public static Subscription getSubscription() {
+        subscription = GoodPrefs.getInstance().getObject(Constants.SUBSCRIPTION_LEVEL, Subscription.class);
+        if(subscription == null)
+            subscription = Subscription.Free;
         return subscription;
     }
 
@@ -102,10 +100,6 @@ public class SDK {
         context = contextX;
     }
 
-    private static void initializeSubscription(Subscription subscriptionX) {
-        subscription = subscriptionX;
-    }
-
     public static Context getContext() {
         return context;
     }
@@ -115,11 +109,10 @@ public class SDK {
     }
 
     public static MenuChoice getMenuChoice() {
+        menuChoice = GoodPrefs.getInstance().getObject(Constants.MENU_OPTION, MenuChoice.class);
+        if (menuChoice == null)
+            menuChoice = MenuChoice.CONTEXTUAL_MENU;
         return menuChoice;
-    }
-
-    public static void setInputStream(InputStream inputStream) {
-        SDK.inputStream = inputStream;
     }
 
     public static Ministry getMinistry() throws NullPointerException {
@@ -138,7 +131,6 @@ public class SDK {
             commentsDialog.show(activity.getSupportFragmentManager(), CommentsDialog.TAG);
         }else{
             Intent intent = new Intent(activity, CommentsActivity.class);
-           // intent.putExtra(Constants.TITLE, commentsSettings.getTitle());
             intent.putExtra(Constants.SETTINGS, GSONSingleton.getInstance().getGson().toJson(commentsSettings));
             activity.startActivity(intent);
         }

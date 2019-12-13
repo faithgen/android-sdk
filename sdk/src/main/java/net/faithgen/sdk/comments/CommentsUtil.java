@@ -30,6 +30,8 @@ import net.innoflash.iosview.swipelib.SwipeRefreshLayout;
 import java.util.HashMap;
 import java.util.List;
 
+import nouri.in.goodprefslib.GoodPrefs;
+
 public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private Context context;
     private CommentsSettings commentsSettings;
@@ -125,7 +127,8 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     }
 
     private void signInProfile() {
-        Toast.makeText(context, commentsSettings.getFieldName(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(context, commentsSettings.getFieldName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, GoodPrefs.getInstance().getString("xxx", "default lib"), Toast.LENGTH_SHORT).show();
     }
 
     private void sendComment() {

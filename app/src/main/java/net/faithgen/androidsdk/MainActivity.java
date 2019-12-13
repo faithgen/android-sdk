@@ -19,6 +19,8 @@ import net.faithgen.sdk.comments.CommentsSettings;
 
 import java.util.HashMap;
 
+import nouri.in.goodprefslib.GoodPrefs;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView textView;
@@ -75,5 +77,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoodPrefs.getInstance().saveString("xxx", "this is my string from app");
     }
 }
