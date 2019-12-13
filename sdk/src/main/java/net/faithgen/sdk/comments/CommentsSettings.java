@@ -5,6 +5,8 @@ import net.faithgen.sdk.utils.Constants;
 
 import java.util.HashMap;
 
+import nouri.in.goodprefslib.GoodPrefs;
+
 public class CommentsSettings {
     private static final String LIMIT = "limit";
     private String itemId;
@@ -55,7 +57,7 @@ public class CommentsSettings {
         private String itemId;
         private String title = Constants.COMMENTS;
         private String category;
-        private int limit = 15;
+        private int limit = GoodPrefs.getInstance().getInt(Constants.LIMIT, 15);
         private CommentsSettings commentsSettings;
         private CommentsDisplay commentsDisplay = CommentsDisplay.ACTIVITY;
 
