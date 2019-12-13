@@ -51,6 +51,7 @@ dependencies {
     api 'com.gdacciaro:iosdialog:1.0.3' //iOS like dialogs
     api 'de.hdodenhof:circleimageview:3.0.1' //circular images lib
     api 'com.squareup.picasso:picasso:2.71828' //image lazyloader lib
+    api 'com.github.MrNouri:GoodPrefs:1.0' //shared prefs lib
 }
 repositories {
     mavenCentral()
