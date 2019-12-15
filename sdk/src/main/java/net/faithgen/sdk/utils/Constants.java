@@ -17,4 +17,5 @@ public class Constants {
     public static final String SUBSCRIPTION_LEVEL = "_subscription_level";
     public static final String USER = "_user";
     public static final String LIMIT = "limit";
+    public static final String COMMENTS_DISPLAY = "_comments_display";
 }

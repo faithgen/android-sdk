@@ -59,7 +59,12 @@ public class CommentsSettings {
         private String category;
         private int limit = GoodPrefs.getInstance().getInt(Constants.LIMIT, 15);
         private CommentsSettings commentsSettings;
-        private CommentsDisplay commentsDisplay = CommentsDisplay.ACTIVITY;
+        private CommentsDisplay commentsDisplay = getCommentsDisplay();
+
+        private CommentsDisplay getCommentsDisplay(){
+            if(GoodPrefs.getInstance().getObject(Constants.COMMENTS_DISPLAY, CommentsDisplay.class) == null) return CommentsDisplay.DIALOG;
+            else return GoodPrefs.getInstance().getObject(Constants.COMMENTS_DISPLAY, CommentsDisplay.class);
+        }
 
         public Builder setCommentsDisplay(CommentsDisplay commentsDisplay) {
             this.commentsDisplay = commentsDisplay;
