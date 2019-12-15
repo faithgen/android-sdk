@@ -112,13 +112,19 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
             comments = commentsResponse.getComments();
             adapter = new CommentsAdapter(context, comments);
             commentsView.setAdapter(adapter);
-            if (comments.size() != 0)
+            try {
                 commentsView.smoothScrollToPosition(comments.size() - 1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             comments.addAll(0, commentsResponse.getComments());
             adapter.notifyDataSetChanged();
-            if (comments.size() != 0)
+            try {
                 commentsView.smoothScrollToPosition(commentsResponse.getComments().size() + 1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         initNoComments();
@@ -127,9 +133,9 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private void initNoComments() {
         if (comments == null || comments.size() == 0) {
             noComments.setVisibility(View.VISIBLE);
-            if(noComments.getText().toString().contains("could")) noComments.setText("No comments found for this item");
-        }
-        else noComments.setVisibility(View.GONE);
+            if (noComments.getText().toString().contains("could"))
+                noComments.setText("No comments found for this item");
+        } else noComments.setVisibility(View.GONE);
     }
 
     private void signInProfile() {
