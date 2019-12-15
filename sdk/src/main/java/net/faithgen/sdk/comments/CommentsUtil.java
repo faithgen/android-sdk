@@ -100,6 +100,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
                 //super.onError(errorResponse);
                 swipeRefreshLayout.setRefreshing(false);
                 Dialogs.showOkDialog(context, errorResponse.getMessage(), false);
+                noComments.setText(errorResponse.getMessage());
             }
         });
     }
@@ -111,18 +112,23 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
             comments = commentsResponse.getComments();
             adapter = new CommentsAdapter(context, comments);
             commentsView.setAdapter(adapter);
-            commentsView.smoothScrollToPosition(comments.size() - 1);
+            if (comments.size() != 0)
+                commentsView.smoothScrollToPosition(comments.size() - 1);
         } else {
             comments.addAll(0, commentsResponse.getComments());
             adapter.notifyDataSetChanged();
-            commentsView.smoothScrollToPosition(commentsResponse.getComments().size() + 1);
+            if (comments.size() != 0)
+                commentsView.smoothScrollToPosition(commentsResponse.getComments().size() + 1);
         }
 
         initNoComments();
     }
 
     private void initNoComments() {
-        if (comments == null || comments.size() == 0) noComments.setVisibility(View.VISIBLE);
+        if (comments == null || comments.size() == 0) {
+            noComments.setVisibility(View.VISIBLE);
+            if(noComments.getText().toString().contains("could")) noComments.setText("No comments found for this item");
+        }
         else noComments.setVisibility(View.GONE);
     }
 
@@ -147,8 +153,9 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
                 }
 
                 @Override
-                public void onResponse(String serverResponse) {
-                    super.onResponse(serverResponse);
+                public void onError(ErrorResponse errorResponse) {
+                    //super.onError(errorResponse);
+                    Dialogs.showOkDialog(context, errorResponse.getMessage(), false);
                 }
             });
         }

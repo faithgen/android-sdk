@@ -18,7 +18,7 @@ public class TheApp extends Application {
         super.onCreate();
         try {
             GoodPrefs.init(this);
-            SDK.initializeSDK(this, this.getAssets().open("config.json"), getResources().getString(R.color.colorPrimaryDark));
+            SDK.initializeSDK(this, this.getAssets().open("config.json"), getResources().getString(R.color.colorPrimaryDark), null);
         } catch (IOException e) {
             e.printStackTrace();
         }

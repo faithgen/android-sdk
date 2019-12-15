@@ -27,7 +27,7 @@ import java.util.Map;
 public class API {
     private static final String API_KEY = "x-api-key";
     private static final String USER_KEY = "x-user-key";
-    private static final String REQUEST_TAG = "Request_XTag";
+    public static final String REQUEST_TAG = "Request_XTag";
     private static String ROOT_PATH = "http://192.168.0.105:8001/api/";
     private static StringRequest stringRequest;
     private static ErrorResponse errorResponse;
