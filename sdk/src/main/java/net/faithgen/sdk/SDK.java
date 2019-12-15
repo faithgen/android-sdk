@@ -10,6 +10,7 @@ import net.faithgen.sdk.comments.CommentsActivity;
 import net.faithgen.sdk.comments.CommentsDialog;
 import net.faithgen.sdk.enums.CommentsDisplay;
 import net.faithgen.sdk.enums.Subscription;
+import net.faithgen.sdk.interfaces.UserAuthListener;
 import net.faithgen.sdk.menu.MenuChoice;
 import net.faithgen.sdk.comments.CommentsSettings;
 import net.faithgen.sdk.models.Config;
@@ -31,6 +32,7 @@ public class SDK {
     static String apiBase;
     static String themeColor;
     static User user;
+    static UserAuthListener userAuthListener;
 
     private static void initializeUser(User userX){ user = userX;}
 
@@ -70,10 +72,11 @@ public class SDK {
      * @param inputStreamX  use the InputStream of the config.json file. The SDK will make models out of that one
      * @param themeColor_ sets the themeColor
      */
-    public static void initializeSDK(Context contextX, InputStream inputStreamX, String themeColor_) {
+    public static void initializeSDK(Context contextX, InputStream inputStreamX, String themeColor_, UserAuthListener userAuthListener_) {
         initializeConfig(inputStreamX);
         initializeContext(contextX);
         initializeThemeColor(themeColor_);
+        initializeUserAuthListener(userAuthListener_);
     }
 
     public static Subscription getSubscription() {
@@ -83,6 +86,9 @@ public class SDK {
         return subscription;
     }
 
+    private static void initializeUserAuthListener(UserAuthListener userAuthListenerx) {
+        userAuthListener = userAuthListenerx;
+    }
     /**
      * Initiliaze API bas path
      *
@@ -113,6 +119,10 @@ public class SDK {
         if (menuChoice == null)
             menuChoice = MenuChoice.CONTEXTUAL_MENU;
         return menuChoice;
+    }
+
+    public static UserAuthListener getUserAuthListener() {
+        return userAuthListener;
     }
 
     public static Ministry getMinistry() throws NullPointerException {

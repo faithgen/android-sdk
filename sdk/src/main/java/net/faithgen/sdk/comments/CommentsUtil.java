@@ -59,7 +59,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         this.commentsSettings = commentsSettings;
     }
 
-    public void initViews(View view){
+    public void initViews(View view) {
         signInLayout = view.findViewById(R.id.sign_in_layout);
         commentLayout = view.findViewById(R.id.comment_layout);
         signIn = view.findViewById(R.id.sign_in);
@@ -77,7 +77,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     }
 
     private void initFooterLayouts() {
-        if(SDK.getUser() != null) signInLayout.setVisibility(View.GONE);
+        if (SDK.getUser() != null) signInLayout.setVisibility(View.GONE);
         else commentLayout.setVisibility(View.GONE);
     }
 
@@ -87,7 +87,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
-    public void loadComments(String url){
+    public void loadComments(String url) {
         API.get(context, url, commentsSettings.getParams(), false, new ServerResponse() {
             @Override
             public void onServerResponse(String serverResponse) {
@@ -107,12 +107,12 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private void populateComments(String serverResponse) {
         pagination = GSONSingleton.getInstance().getGson().fromJson(serverResponse, Pagination.class);
         commentsResponse = GSONSingleton.getInstance().getGson().fromJson(serverResponse, CommentsResponse.class);
-        if(comments == null || comments.size() == 0){
+        if (comments == null || comments.size() == 0) {
             comments = commentsResponse.getComments();
             adapter = new CommentsAdapter(context, comments);
             commentsView.setAdapter(adapter);
             commentsView.smoothScrollToPosition(comments.size() - 1);
-        }else{
+        } else {
             comments.addAll(0, commentsResponse.getComments());
             adapter.notifyDataSetChanged();
             commentsView.smoothScrollToPosition(commentsResponse.getComments().size() + 1);
@@ -122,18 +122,18 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     }
 
     private void initNoComments() {
-        if(comments == null || comments.size() == 0) noComments.setVisibility(View.VISIBLE);
+        if (comments == null || comments.size() == 0) noComments.setVisibility(View.VISIBLE);
         else noComments.setVisibility(View.GONE);
     }
 
     private void signInProfile() {
-       // Toast.makeText(context, commentsSettings.getFieldName(), Toast.LENGTH_SHORT).show();
-        Toast.makeText(context, GoodPrefs.getInstance().getString("xxx", "default lib"), Toast.LENGTH_SHORT).show();
+        if (SDK.getUserAuthListener() != null) SDK.getUserAuthListener().onSignInTapped();
     }
 
     private void sendComment() {
-        if(commentField.getText().toString().isEmpty()) Dialogs.showOkDialog(context, Constants.BLANK_COMMENT, false);
-        else{
+        if (commentField.getText().toString().isEmpty())
+            Dialogs.showOkDialog(context, Constants.BLANK_COMMENT, false);
+        else {
             params = new HashMap<>();
             params.put(commentsSettings.getFieldName(), commentsSettings.getItemId());
             params.put(Constants.COMMENT, commentField.getText().toString());
@@ -141,9 +141,9 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
                 @Override
                 public void onServerResponse(String serverResponse) {
                     response = GSONSingleton.getInstance().getGson().fromJson(serverResponse, Response.class);
-                    if(response.isSuccess()){
+                    if (response.isSuccess()) {
                         processSuccessfulRequest(response);
-                    }else Dialogs.showOkDialog(context, response.getMessage(), false);
+                    } else Dialogs.showOkDialog(context, response.getMessage(), false);
                 }
 
                 @Override
@@ -158,15 +158,15 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         commentField.setText("");
         Toast.makeText(context, response.getMessage(), Toast.LENGTH_SHORT).show();
         comments.add(response.getComment());
-        commentsView.smoothScrollToPosition(comments.size()-1);
+        commentsView.smoothScrollToPosition(comments.size() - 1);
         initNoComments();
     }
 
     @Override
     public void onRefresh() {
-        if(pagination == null || pagination.getLinks().getNext() == null){
+        if (pagination == null || pagination.getLinks().getNext() == null) {
             swipeRefreshLayout.setRefreshing(false);
             Toast.makeText(context, Constants.REACHED_END, Toast.LENGTH_SHORT).show();
-        }else loadComments(pagination.getLinks().getNext());
+        } else loadComments(pagination.getLinks().getNext());
     }
 }
