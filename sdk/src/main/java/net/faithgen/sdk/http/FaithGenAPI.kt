@@ -176,7 +176,28 @@ class FaithGenAPI(val context: Context) {
         return headers
     }
 
-    private fun makeSilentRequest() {}
+    private fun makeSilentRequest() {
+        stringRequest = object : StringRequest(method, getRoute(), { response ->
+            if (serverResponse != null) {
+                serverResponse!!.setUpCall(context!!, finish)
+                serverResponse!!.onResponse(response)
+            }
+        }, { error: VolleyError? ->
+            error!!.printStackTrace()
+            processError(error)
+        }) {
+            override fun getParams(): MutableMap<String, String> {
+                if (params != null)
+                    return params
+                return super.getParams()
+            }
+
+            override fun getHeaders(): MutableMap<String, String> {
+                return addUserToHeaders()
+            }
+        }
+        launchRequest()
+    }
 
     companion object {
         const val ROOT_PATH = "http://192.168.8.101:8001/api/"
