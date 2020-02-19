@@ -2,25 +2,21 @@ package net.faithgen.androidsdk;
 
 import android.graphics.Color;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.faithgen.sdk.SDK;
-import net.faithgen.sdk.enums.CommentsDisplay;
 import net.faithgen.sdk.comments.CommentsSettings;
-import net.faithgen.sdk.utils.Dialogs;
+import net.faithgen.sdk.enums.CommentsDisplay;
 
 import java.util.HashMap;
-
-import nouri.in.goodprefslib.GoodPrefs;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,17 +41,16 @@ public class MainActivity extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("first_char", "this is the params");
                 params.put("second params", "2");
-              //  API.get(MainActivity.this, "https://theroute", params, false, null);
+                //  API.get(MainActivity.this, "https://theroute", params, false, null);
 
-/*                SDK.openComments(MainActivity.this, new CommentsSettings.Builder()
+                SDK.openComments(MainActivity.this, new CommentsSettings.Builder()
                         .setCategory("sermons/")
                         //.setItemId("-5-3e4c7f160-b5191986fb06-be8fe23ad2")
                         .setItemId("79c9-9c01738c296fe3019989a-e167-34e-")
                         .setTitle("Sermon title")
                         .setLimit(2)
                         .setCommentsDisplay(CommentsDisplay.DIALOG)
-                        .build());*/
-                Dialogs.showOkDialog(MainActivity.this, SDK.getMinistry().getName(), false);
+                        .build());
             }
         });
     }
@@ -85,6 +80,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        GoodPrefs.getInstance().saveString("xxx", "this is my string from app");
     }
 }

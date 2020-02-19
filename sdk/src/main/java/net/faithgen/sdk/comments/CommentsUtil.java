@@ -12,12 +12,13 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.faithgen.sdk.R;
 import net.faithgen.sdk.SDK;
-import net.faithgen.sdk.http.API;
 import net.faithgen.sdk.http.ErrorResponse;
+import net.faithgen.sdk.http.FaithGenAPI;
 import net.faithgen.sdk.http.Pagination;
 import net.faithgen.sdk.http.Response;
 import net.faithgen.sdk.http.types.ServerResponse;
@@ -49,6 +50,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private List<Comment> comments;
     private HashMap<String, String> params;
     private Response response;
+    private FaithGenAPI faithGenAPI;
 
     public List<Comment> getComments() {
         return comments;
@@ -88,21 +90,25 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     }
 
     public void loadComments(String url) {
-        API.get(context, url, commentsSettings.getParams(), false, new ServerResponse() {
-            @Override
-            public void onServerResponse(String serverResponse) {
-                populateComments(serverResponse);
-                swipeRefreshLayout.setRefreshing(false);
-            }
+        faithGenAPI = new FaithGenAPI(context)
+                .setParams(commentsSettings.getParams())
+                .setMethod(Request.Method.GET)
+                .setServerResponse(new ServerResponse() {
+                    @Override
+                    public void onServerResponse(String serverResponse) {
+                        populateComments(serverResponse);
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
 
-            @Override
-            public void onError(ErrorResponse errorResponse) {
-                //super.onError(errorResponse);
-                swipeRefreshLayout.setRefreshing(false);
-                Dialogs.showOkDialog(context, errorResponse.getMessage(), false);
-                noComments.setText(errorResponse.getMessage());
-            }
-        });
+                    @Override
+                    public void onError(ErrorResponse errorResponse) {
+                        //super.onError(errorResponse);
+                        swipeRefreshLayout.setRefreshing(false);
+                        Dialogs.showOkDialog(context, errorResponse.getMessage(), false);
+                        noComments.setText(errorResponse.getMessage());
+                    }
+                });
+        faithGenAPI.request(url);
     }
 
     private void populateComments(String serverResponse) {
@@ -149,21 +155,26 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
             params = new HashMap<>();
             params.put(commentsSettings.getFieldName(), commentsSettings.getItemId());
             params.put(Constants.COMMENT, commentField.getText().toString());
-            API.post(context, commentsSettings.getCategory() + "comment", params, false, new ServerResponse() {
-                @Override
-                public void onServerResponse(String serverResponse) {
-                    response = GSONSingleton.Companion.getInstance().getGson().fromJson(serverResponse, Response.class);
-                    if (response.isSuccess()) {
-                        processSuccessfulRequest(response);
-                    } else Dialogs.showOkDialog(context, response.getMessage(), false);
-                }
 
-                @Override
-                public void onError(ErrorResponse errorResponse) {
-                    //super.onError(errorResponse);
-                    Dialogs.showOkDialog(context, errorResponse.getMessage(), false);
-                }
-            });
+            faithGenAPI = new FaithGenAPI(context)
+                    .setParams(params)
+                    .setMethod(Request.Method.POST)
+                    .setServerResponse(new ServerResponse() {
+                        @Override
+                        public void onServerResponse(String serverResponse) {
+                            response = GSONSingleton.Companion.getInstance().getGson().fromJson(serverResponse, Response.class);
+                            if (response.isSuccess()) {
+                                processSuccessfulRequest(response);
+                            } else Dialogs.showOkDialog(context, response.getMessage(), false);
+                        }
+
+                        @Override
+                        public void onError(ErrorResponse errorResponse) {
+                            //super.onError(errorResponse);
+                            Dialogs.showOkDialog(context, errorResponse.getMessage(), false);
+                        }
+                    });
+            faithGenAPI.request(commentsSettings.getCategory() + "comment");
         }
     }
 
