@@ -30,7 +30,7 @@ public class CommentsActivity extends FaithGenActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_comments);
 
-        commentsSettings = GSONSingleton.getInstance().getGson().fromJson(getIntent().getStringExtra(Constants.SETTINGS), CommentsSettings.class);
+        commentsSettings = GSONSingleton.Companion.getInstance().getGson().fromJson(getIntent().getStringExtra(Constants.SETTINGS), CommentsSettings.class);
         commentsUtil = new CommentsUtil(this, commentsSettings);
 
         commentsUtil.initViews(getView());

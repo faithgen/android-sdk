@@ -16,6 +16,7 @@ import android.widget.TextView;
 import net.faithgen.sdk.SDK;
 import net.faithgen.sdk.enums.CommentsDisplay;
 import net.faithgen.sdk.comments.CommentsSettings;
+import net.faithgen.sdk.utils.Dialogs;
 
 import java.util.HashMap;
 
@@ -46,14 +47,15 @@ public class MainActivity extends AppCompatActivity {
                 params.put("second params", "2");
               //  API.get(MainActivity.this, "https://theroute", params, false, null);
 
-                SDK.openComments(MainActivity.this, new CommentsSettings.Builder()
+/*                SDK.openComments(MainActivity.this, new CommentsSettings.Builder()
                         .setCategory("sermons/")
                         //.setItemId("-5-3e4c7f160-b5191986fb06-be8fe23ad2")
                         .setItemId("79c9-9c01738c296fe3019989a-e167-34e-")
                         .setTitle("Sermon title")
                         .setLimit(2)
                         .setCommentsDisplay(CommentsDisplay.DIALOG)
-                        .build());
+                        .build());*/
+                Dialogs.showOkDialog(MainActivity.this, SDK.getMinistry().getName(), false);
             }
         });
     }

@@ -110,7 +110,7 @@ public class CommentView extends LinearLayout {
 
     public void setComment(Comment comment) {
         this.comment = comment;
-        if (comment.getCreator().isAdmin())
+        if (comment.getCreator().is_admin())
             commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_admin_background));
 
         if (SDK.getUser() == null)

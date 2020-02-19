@@ -25,12 +25,12 @@ import java.io.InputStream;
 import nouri.in.goodprefslib.GoodPrefs;
 
 public class SDK {
-    static InputStream inputStream;
-    static MenuChoice menuChoice;
-    static Context context;
-    static Subscription subscription;
-    static String apiBase;
-    static String themeColor;
+    private static InputStream inputStream;
+    private static MenuChoice menuChoice;
+    private static Context context;
+    private static Subscription subscription;
+    private static String apiBase;
+    private static String themeColor;
     static User user;
     static UserAuthListener userAuthListener;
 
@@ -43,21 +43,21 @@ public class SDK {
     /**
      * Sets the theme color to be used on the app for toolbar and icons
      *
-     * @param themeColor_
+     * @param themeColor_ the theme color
      */
-    private static void initializeThemeColor(String themeColor_) {
+    public static void initializeThemeColor(String themeColor_) {
         themeColor = themeColor_;
     }
 
     /**
      * Use this to set the theme color of the app. You should use a string value from a value.xml file
      *
-     * @return
+     * @return String
      */
     public static String getThemeColor() {
-        if (themeColor == null) return null;
-        else
-            return "#" + themeColor.substring(3);
+        if (themeColor == null)
+            return themeColor;
+        return "#" + themeColor.substring(3);
     }
 
     public static User getUser() {
@@ -126,13 +126,13 @@ public class SDK {
     }
 
     public static Ministry getMinistry() throws NullPointerException {
-        if (MinistrySingleton.getInstance().getMinistry() == null)
+        if (MinistrySingleton.Companion.getInstance().getMinistry() == null)
             throw new NullPointerException("Couldn`t find any ministry, you have to set the proper config file");
-        return MinistrySingleton.getInstance().getMinistry();
+        return MinistrySingleton.Companion.getInstance().getMinistry();
     }
 
     public static Config getConfig() {
-        return MinistrySingleton.getInstance().getConfig();
+        return MinistrySingleton.Companion.getInstance().getConfig();
     }
 
     public static void openComments(AppCompatActivity activity, CommentsSettings commentsSettings){
@@ -141,8 +141,8 @@ public class SDK {
             commentsDialog.show(activity.getSupportFragmentManager(), CommentsDialog.TAG);
         }else{
             Intent intent = new Intent(activity, CommentsActivity.class);
-            intent.putExtra(Constants.SETTINGS, GSONSingleton.getInstance().getGson().toJson(commentsSettings));
+            intent.putExtra(Constants.SETTINGS, GSONSingleton.Companion.getInstance().getGson().toJson(commentsSettings));
             activity.startActivity(intent);
         }
-    };
+    }
 }

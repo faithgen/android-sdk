@@ -43,7 +43,7 @@ public class ErrorResponse {
             String responseBody = null;
             try {
                 responseBody = new String(error.networkResponse.data, "utf-8");
-                errorResponse = GSONSingleton.getInstance().getGson().fromJson(responseBody, ErrorResponse.class);
+                errorResponse = GSONSingleton.Companion.getInstance().getGson().fromJson(responseBody, ErrorResponse.class);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
                 return null;

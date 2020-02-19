@@ -106,8 +106,8 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     }
 
     private void populateComments(String serverResponse) {
-        pagination = GSONSingleton.getInstance().getGson().fromJson(serverResponse, Pagination.class);
-        commentsResponse = GSONSingleton.getInstance().getGson().fromJson(serverResponse, CommentsResponse.class);
+        pagination = GSONSingleton.Companion.getInstance().getGson().fromJson(serverResponse, Pagination.class);
+        commentsResponse = GSONSingleton.Companion.getInstance().getGson().fromJson(serverResponse, CommentsResponse.class);
         if (comments == null || comments.size() == 0) {
             comments = commentsResponse.getComments();
             adapter = new CommentsAdapter(context, comments);
@@ -152,7 +152,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
             API.post(context, commentsSettings.getCategory() + "comment", params, false, new ServerResponse() {
                 @Override
                 public void onServerResponse(String serverResponse) {
-                    response = GSONSingleton.getInstance().getGson().fromJson(serverResponse, Response.class);
+                    response = GSONSingleton.Companion.getInstance().getGson().fromJson(serverResponse, Response.class);
                     if (response.isSuccess()) {
                         processSuccessfulRequest(response);
                     } else Dialogs.showOkDialog(context, response.getMessage(), false);
