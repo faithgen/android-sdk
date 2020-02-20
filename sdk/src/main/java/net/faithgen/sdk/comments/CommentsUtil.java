@@ -31,8 +31,6 @@ import net.innoflash.iosview.swipelib.SwipeRefreshLayout;
 import java.util.HashMap;
 import java.util.List;
 
-import nouri.in.goodprefslib.GoodPrefs;
-
 public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private Context context;
     private CommentsSettings commentsSettings;
@@ -163,7 +161,7 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
                         @Override
                         public void onServerResponse(String serverResponse) {
                             response = GSONSingleton.Companion.getInstance().getGson().fromJson(serverResponse, Response.class);
-                            if (response.isSuccess()) {
+                            if (response.getSuccess()) {
                                 processSuccessfulRequest(response);
                             } else Dialogs.showOkDialog(context, response.getMessage(), false);
                         }

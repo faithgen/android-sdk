@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
 class FaithGenAPI(val context: Context) {
-    private var params: HashMap<String, String>? = null
+    private var requestParams: HashMap<String, String>? = null
     private var finish: Boolean = false
     private var route: String? = null
     private var isSilentCall: Boolean = false
@@ -42,7 +42,7 @@ class FaithGenAPI(val context: Context) {
      * Encodes parameters for get request
      */
     private fun encodeParams(hasPage: Boolean): String {
-        val iterator = params!!.entries.iterator()
+        val iterator = requestParams!!.entries.iterator()
         var encodedQueries = ""
         while (iterator.hasNext()) {
             val entry = iterator.next() as Map.Entry<String, String>
@@ -61,7 +61,7 @@ class FaithGenAPI(val context: Context) {
      */
     private fun trimUrl(url: String): String {
         val paramsIndex: Int = url.indexOf("?")
-        if (params == null) return url
+        if (requestParams == null) return url
         if (url.contains("page=")) return url + encodeParams(true)
         else if (paramsIndex == -1)
             return url + encodeParams(false);
@@ -88,7 +88,7 @@ class FaithGenAPI(val context: Context) {
      * Sets the parameters for the request
      */
     fun setParams(params: HashMap<String, String>?): FaithGenAPI {
-        this.params = params
+        this.requestParams = params
         return this
     }
 
@@ -140,8 +140,8 @@ class FaithGenAPI(val context: Context) {
             processError(error)
         }) {
             override fun getParams(): MutableMap<String, String> {
-                if (params != null)
-                    return params
+                if (requestParams != null)
+                    return requestParams as HashMap<String, String>
                 return super.getParams()
             }
 
@@ -187,8 +187,8 @@ class FaithGenAPI(val context: Context) {
             processError(error)
         }) {
             override fun getParams(): MutableMap<String, String> {
-                if (params != null)
-                    return params
+                if (requestParams != null)
+                    return requestParams as HashMap<String, String>
                 return super.getParams()
             }
 
