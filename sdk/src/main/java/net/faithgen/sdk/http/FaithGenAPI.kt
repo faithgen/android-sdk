@@ -20,6 +20,7 @@ class FaithGenAPI(val context: Context) {
     private var method: Int = Request.Method.GET
     private var serverResponse: ServerResponse? = null
     private var errorResponse: ErrorResponse? = null
+    private var process : String? = null
     private var headers: HashMap<String, String> = hashMapOf()
 
     /**
@@ -85,6 +86,17 @@ class FaithGenAPI(val context: Context) {
     }
 
     /**
+     * This sets the process to show on the progress dialog
+     *
+     * @param process
+     * @return FaithGenAPI
+     */
+    fun setProcess(process : String?) : FaithGenAPI{
+        this.process = process
+        return this
+    }
+
+    /**
      * Sets the parameters for the request
      */
     fun setParams(params: HashMap<String, String>?): FaithGenAPI {
@@ -121,13 +133,17 @@ class FaithGenAPI(val context: Context) {
 
     fun cancelRequests() {
         VolleySingleton.getInstance().requestQueue.cancelAll(REQUEST_TAG)
+        try {
+            Progress.dismissProgress()
+        } catch (e: Exception) {
+        }
     }
 
     /**
      * Makes the API call
      */
     private fun makeRequest() {
-        Progress.showProgress(context, null)
+        Progress.showProgress(context, this.process)
         stringRequest = object : StringRequest(method, getRoute(), { response ->
             Progress.dismissProgress()
             if (serverResponse != null) {

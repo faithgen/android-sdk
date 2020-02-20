@@ -18,4 +18,6 @@ object Constants {
     const val USER = "_user"
     const val LIMIT = "limit"
     const val COMMENTS_DISPLAY = "_comments_display"
+    const val FETCHING_COMMENTS = "Fetching comments.."
+    const val SENDING_COMMENT = "Sending comment..."
 }

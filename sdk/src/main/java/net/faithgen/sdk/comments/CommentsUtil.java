@@ -157,6 +157,8 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
             faithGenAPI = new FaithGenAPI(context)
                     .setParams(params)
                     .setMethod(Request.Method.POST)
+                    .setProcess(Constants.SENDING_COMMENT)
+                    .setProcess(Constants.FETCHING_COMMENTS)
                     .setServerResponse(new ServerResponse() {
                         @Override
                         public void onServerResponse(String serverResponse) {
