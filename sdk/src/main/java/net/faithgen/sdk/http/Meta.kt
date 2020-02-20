@@ -1,5 +1,8 @@
 package net.faithgen.sdk.http
 
+/**
+ * The meta data brought by pagination
+ */
 final data class Meta(
         val current_page: Int,
         val from: Int,

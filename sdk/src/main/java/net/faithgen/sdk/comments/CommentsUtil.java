@@ -31,7 +31,10 @@ import net.innoflash.iosview.swipelib.SwipeRefreshLayout;
 import java.util.HashMap;
 import java.util.List;
 
-public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
+/**
+ * Handles commenting of items
+ */
+public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
     private Context context;
     private CommentsSettings commentsSettings;
     private RelativeLayout signInLayout;
@@ -59,6 +62,10 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         this.commentsSettings = commentsSettings;
     }
 
+    /**
+     * Initialized the views used for commenting
+     * @param view
+     */
     public void initViews(View view) {
         signInLayout = view.findViewById(R.id.sign_in_layout);
         commentLayout = view.findViewById(R.id.comment_layout);
@@ -76,17 +83,28 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         initFooterLayouts();
     }
 
+    /**
+     * This decides whether to display the comment field or
+     * let the user know they still have to sign in
+     */
     private void initFooterLayouts() {
         if (SDK.getUser() != null) signInLayout.setVisibility(View.GONE);
         else commentLayout.setVisibility(View.GONE);
     }
 
+    /**
+     * This sets the event listeners for this section
+     */
     private void initViewsEvents() {
         commentFAB.setOnClickListener(v -> sendComment());
         signIn.setOnClickListener(v -> signInProfile());
         swipeRefreshLayout.setOnRefreshListener(this);
     }
 
+    /**
+     * This loads the item comments from the server
+     * @param url The source of the comments
+     */
     public void loadComments(String url) {
         faithGenAPI = new FaithGenAPI(context)
                 .setParams(commentsSettings.getParams())
@@ -109,6 +127,11 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         faithGenAPI.request(url);
     }
 
+    /**
+     * This coverts the comments into native objects
+     * and then render them on the selected view
+     * @param serverResponse
+     */
     private void populateComments(String serverResponse) {
         pagination = GSONSingleton.Companion.getInstance().getGson().fromJson(serverResponse, Pagination.class);
         commentsResponse = GSONSingleton.Companion.getInstance().getGson().fromJson(serverResponse, CommentsResponse.class);
@@ -134,6 +157,9 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         initNoComments();
     }
 
+    /**
+     * Handles what to display of no comments are found for a certain item
+     */
     private void initNoComments() {
         if (comments == null || comments.size() == 0) {
             noComments.setVisibility(View.VISIBLE);
@@ -142,10 +168,16 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         } else noComments.setVisibility(View.GONE);
     }
 
+    /**
+     * This takes the use to the sign in page
+     */
     private void signInProfile() {
         if (SDK.getUserAuthListener() != null) SDK.getUserAuthListener().onSignInTapped();
     }
 
+    /**
+     * This sends the user`s comment to the given item
+     */
     private void sendComment() {
         if (commentField.getText().toString().isEmpty())
             Dialogs.showOkDialog(context, Constants.BLANK_COMMENT, false);
@@ -178,6 +210,12 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
+    /**
+     * This processes the response from the server when a
+     * comment is sent successfully
+     *
+     * @param response
+     */
     private void processSuccessfulRequest(Response response) {
         commentField.setText("");
         Toast.makeText(context, response.getMessage(), Toast.LENGTH_SHORT).show();
@@ -186,6 +224,9 @@ public class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
         initNoComments();
     }
 
+    /**
+     * This handles the comments swipe refresh
+     */
     @Override
     public void onRefresh() {
         if (pagination == null || pagination.getLinks().getNext() == null) {

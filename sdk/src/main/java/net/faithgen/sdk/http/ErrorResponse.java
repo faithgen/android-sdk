@@ -7,7 +7,10 @@ import net.faithgen.sdk.utils.Constants;
 
 import java.io.UnsupportedEncodingException;
 
-public class ErrorResponse {
+/**
+ * The error response sent to the system for every failed HTTP call
+ */
+final public class ErrorResponse {
     private String message;
     private String code;
     private int status;
@@ -37,6 +40,11 @@ public class ErrorResponse {
     }
 
 
+    /**
+     * This makes an error response from a Volley error
+     * @param error
+     * @return
+     */
     public static ErrorResponse makeErrorResponse(VolleyError error) {
         ErrorResponse errorResponse = null;
         if (error.networkResponse != null) {
