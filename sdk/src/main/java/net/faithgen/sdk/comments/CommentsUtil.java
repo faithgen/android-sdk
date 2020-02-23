@@ -109,6 +109,7 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
         faithGenAPI = new FaithGenAPI(context)
                 .setParams(commentsSettings.getParams())
                 .setMethod(Request.Method.GET)
+                .setProcess(Constants.FETCHING_COMMENTS)
                 .setServerResponse(new ServerResponse() {
                     @Override
                     public void onServerResponse(String serverResponse) {
@@ -190,7 +191,6 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
                     .setParams(params)
                     .setMethod(Request.Method.POST)
                     .setProcess(Constants.SENDING_COMMENT)
-                    .setProcess(Constants.FETCHING_COMMENTS)
                     .setServerResponse(new ServerResponse() {
                         @Override
                         public void onServerResponse(String serverResponse) {

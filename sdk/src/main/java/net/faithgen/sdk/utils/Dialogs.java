@@ -14,8 +14,8 @@ public final class Dialogs {
     /**
      * This shows a simple "oK" dialog
      *
-     * @param context The activity calling for a dialog
-     * @param message The message to be displayed
+     * @param context       The activity calling for a dialog
+     * @param message       The message to be displayed
      * @param closeActivity Whether or not to close activity on ok
      */
     public static void showOkDialog(Context context, String message, boolean closeActivity) {
@@ -35,11 +35,31 @@ public final class Dialogs {
     }
 
     /**
+     * This provides an Ok dialog with a callback to on ok
+     * @param context
+     * @param message
+     * @param okDialogListener
+     */
+    public static void showOkDialog(Context context, String message, OkDialogListener okDialogListener) {
+        new iOSDialogBuilder(context)
+                .setTitle(Constants.SERVER_RESPONSE)
+                .setSubtitle(message == null ? Constants.SERVER_ERROR : message)
+                .setBoldPositiveLabel(true)
+                .setCancelable(true)
+                .setPositiveListener(Constants.OK, dialog -> {
+                    dialog.dismiss();
+                    if (okDialogListener != null)
+                        okDialogListener.onOk();
+                })
+                .build().show();
+    }
+
+    /**
      * This opens a confirm dialog to the user
      *
-     * @param context The activity calling for this dialog
-     * @param title The title of the confirm request
-     * @param message The message to be shown to the user
+     * @param context        The activity calling for this dialog
+     * @param title          The title of the confirm request
+     * @param message        The message to be shown to the user
      * @param dialogListener The listener to handle the user`s selection
      */
     public static void confirmDialog(Context context, String title, String message, DialogListener dialogListener) {
@@ -60,5 +80,9 @@ public final class Dialogs {
                 })
                 .build()
                 .show();
+    }
+
+    public interface OkDialogListener {
+        void onOk();
     }
 }
