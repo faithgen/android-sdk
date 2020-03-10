@@ -15,7 +15,7 @@ abstract class DialogListener {
      * Override this if you want to do something else
      * when a user declines what you are confirming
      */
-    fun onNope() {
+    open fun onNope() {
         Log.d("TAG", "onNope: clicked")
     }
 }

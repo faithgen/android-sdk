@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                         .setLimit(2)
                         .setCommentsDisplay(CommentsDisplay.DIALOG)
                         .build());
+
             }
         });
     }
