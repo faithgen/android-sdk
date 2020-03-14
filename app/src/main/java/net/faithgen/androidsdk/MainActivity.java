@@ -15,6 +15,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import net.faithgen.sdk.SDK;
 import net.faithgen.sdk.comments.CommentsSettings;
 import net.faithgen.sdk.enums.CommentsDisplay;
+import net.faithgen.sdk.http.FaithGenAPI;
+import net.faithgen.sdk.http.types.ServerResponse;
 
 import java.util.HashMap;
 
@@ -52,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
                         .setCommentsDisplay(CommentsDisplay.DIALOG)
                         .build());
 
+                new FaithGenAPI(MainActivity.this)
+                        .setServerResponse(new ServerResponse() {
+                            @Override
+                            public void onServerResponse(String serverResponse) {
+
+                            }
+                        }).request("");
             }
         });
     }

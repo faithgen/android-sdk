@@ -6,6 +6,7 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import net.faithgen.sdk.SDK
 import net.faithgen.sdk.http.types.ServerResponse
+import net.faithgen.sdk.interfaces.ServerResponseListener
 import net.faithgen.sdk.singletons.VolleySingleton
 import net.faithgen.sdk.utils.Progress
 import java.io.UnsupportedEncodingException
@@ -18,7 +19,7 @@ class FaithGenAPI(val context: Context) {
     private var isSilentCall: Boolean = false
     private var stringRequest: StringRequest? = null
     private var method: Int = Request.Method.GET
-    private var serverResponse: ServerResponse? = null
+    private var serverResponse: ServerResponseListener? = null
     private var errorResponse: ErrorResponse? = null
     private var process : String? = null
     private var headers: HashMap<String, String> = hashMapOf()
@@ -126,7 +127,7 @@ class FaithGenAPI(val context: Context) {
     /**
      * Sets the reaction to a complete or failed network request
      */
-    fun setServerResponse(serverResponse: ServerResponse?): FaithGenAPI {
+    fun setServerResponse(serverResponse: ServerResponseListener?): FaithGenAPI {
         this.serverResponse = serverResponse
         return this
     }
@@ -147,7 +148,7 @@ class FaithGenAPI(val context: Context) {
         stringRequest = object : StringRequest(method, getRoute(), { response ->
             Progress.dismissProgress()
             if (serverResponse != null) {
-                serverResponse!!.setUpCall(context!!, finish)
+                serverResponse!!.setUpCall(context, finish)
                 serverResponse!!.onResponse(response)
             }
         }, { error: VolleyError? ->

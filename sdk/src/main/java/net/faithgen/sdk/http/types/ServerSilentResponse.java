@@ -1,7 +1,11 @@
 package net.faithgen.sdk.http.types;
 
+import android.content.Context;
+
 import net.faithgen.sdk.http.ErrorResponse;
 import net.faithgen.sdk.interfaces.ServerResponseListener;
+
+import org.jetbrains.annotations.NotNull;
 
 public abstract class ServerSilentResponse implements ServerResponseListener {
 
@@ -14,6 +18,11 @@ public abstract class ServerSilentResponse implements ServerResponseListener {
 
     @Override
     public void onError(ErrorResponse errorResponse) {
+
+    }
+
+    @Override
+    public void setUpCall(@NotNull Context context, boolean finish) {
 
     }
 }

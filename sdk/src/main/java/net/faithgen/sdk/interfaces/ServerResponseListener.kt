@@ -1,5 +1,6 @@
 package net.faithgen.sdk.interfaces
 
+import android.content.Context
 import net.faithgen.sdk.http.ErrorResponse
 
 /**
@@ -19,4 +20,7 @@ interface ServerResponseListener {
      * @param errorResponse The manufactured error response from Volley
      */
     fun onError(errorResponse: ErrorResponse?)
+
+    fun setUpCall(context: Context, finish: Boolean)
+
 }
