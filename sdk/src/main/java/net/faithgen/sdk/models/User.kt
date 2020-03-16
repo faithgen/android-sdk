@@ -5,5 +5,9 @@ data class User(
         val name: String,
         val picture: String,
         val email: String,
-        val is_admin: Boolean
+        val phone: String,
+        val provider: String,
+        val is_admin: Boolean,
+        val active: Boolean,
+        val joined: Date
 )
