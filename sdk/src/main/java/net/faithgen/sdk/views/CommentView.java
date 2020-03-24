@@ -119,10 +119,12 @@ public class CommentView extends LinearLayout {
             setUserName(comment.getCreator().getName() + " (you)");
             commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_admin_background));
         }
+
         setUserComment(comment.getComment());
         setTime(comment.getDate().getApprox());
+
         Picasso.get()
-                .load(comment.getCreator().getPicture())
+                .load(comment.getCreator().getAvatar().get_50())
                 .error(R.drawable.commenter)
                 .placeholder(R.drawable.commenter)
                 .into(getCircularImageView());

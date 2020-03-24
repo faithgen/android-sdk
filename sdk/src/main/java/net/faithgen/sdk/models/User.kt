@@ -3,7 +3,7 @@ package net.faithgen.sdk.models
 data class User(
         val id: String,
         val name: String,
-        val picture: String,
+        val avatar: Avatar,
         val email: String,
         val phone: String,
         val provider: String,
