@@ -113,18 +113,25 @@ public class CommentView extends LinearLayout {
 
     public void setComment(Comment comment) {
         this.comment = comment;
-        if (comment.getCreator().is_admin())
-            commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_admin_background));
 
-        if (SDK.getUser() == null || !SDK.getUser().getId().equals(comment.getCreator().getId()))
-            setUserName(comment.getCreator().getName());
-        else {
-            setUserName(comment.getCreator().getName() + " (you)");
+        setUserName(comment.getCreator().getName());
+
+        if (comment.getCreator().is_admin()) {
+            setUserName(comment.getCreator().getName() + " (admin)");
+            commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_admin_background));
+        }else commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_background));
+
+        if (SDK.getUser() != null && SDK.getUser().getId().equals(comment.getCreator().getId())){
+            setUserName(SDK.getUser().getName() + " (you)");
             getUserNameView().setGravity(Gravity.END);
             commentlayout.setBackground(getResources().getDrawable(R.drawable.me_chat_background));
 
             getCircularImageView().setVisibility(INVISIBLE);
             meImageView.setVisibility(VISIBLE);
+        }else{
+            getUserNameView().setGravity(Gravity.START);
+            getCircularImageView().setVisibility(VISIBLE);
+            meImageView.setVisibility(INVISIBLE);
         }
 
         setUserComment(comment.getComment());

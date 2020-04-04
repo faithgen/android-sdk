@@ -17,8 +17,15 @@ import net.faithgen.sdk.comments.CommentsSettings;
 import net.faithgen.sdk.enums.CommentsDisplay;
 import net.faithgen.sdk.http.FaithGenAPI;
 import net.faithgen.sdk.http.types.ServerResponse;
+import net.faithgen.sdk.models.Avatar;
+import net.faithgen.sdk.models.Date;
+import net.faithgen.sdk.models.User;
+import net.faithgen.sdk.singletons.GSONSingleton;
+import net.faithgen.sdk.utils.Constants;
 
 import java.util.HashMap;
+
+import nouri.in.goodprefslib.GoodPrefs;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,22 +52,22 @@ public class MainActivity extends AppCompatActivity {
                 params.put("second params", "2");
                 //  API.get(MainActivity.this, "https://theroute", params, false, null);
 
+
                 SDK.openComments(MainActivity.this, new CommentsSettings.Builder()
                         .setCategory("sermons/")
                         //.setItemId("-5-3e4c7f160-b5191986fb06-be8fe23ad2")
-                        .setItemId("79c9-9c01738c296fe3019989a-e167-34e-")
+                        .setItemId("-5-3e4c7f160-b5191986fb06-be8fe23ad2")
                         .setTitle("Sermon title")
-                        .setLimit(2)
+                        .setLimit(12)
                         .setCommentsDisplay(CommentsDisplay.DIALOG)
                         .build());
-
-                new FaithGenAPI(MainActivity.this)
+/*               new FaithGenAPI(MainActivity.this)
                         .setServerResponse(new ServerResponse() {
                             @Override
                             public void onServerResponse(String serverResponse) {
 
                             }
-                        }).request("");
+                        }).request("");*/
             }
         });
     }
@@ -90,5 +97,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        String theUser = "{\n" +
+                "    \"success\": true,\n" +
+                "    \"message\": \"Login successful.\",\n" +
+                "    \"user\": {\n" +
+                "        \"id\": \"c2582401-7c7a-404d-9d56-99a754f4ce27\",\n" +
+                "        \"active\": true,\n" +
+                "        \"name\": \"New Name\",\n" +
+                "        \"email\": \"my@email.com\",\n" +
+                "        \"phone\": \"0651562691\",\n" +
+                "        \"provider\": \"faithgen\",\n" +
+                "        \"avatar\": {\n" +
+                "            \"_50\": \"http://192.168.8.100:8001/storage/users/50-50/57a54f7286109507444c23-c07955d1988-132959c094-9e1ad8-815.png\",\n" +
+                "            \"_100\": \"http://192.168.8.100:8001/storage/users/100-100/57a54f7286109507444c23-c07955d1988-132959c094-9e1ad8-815.png\",\n" +
+                "            \"original\": \"http://192.168.8.100:8001/storage/users/original/57a54f7286109507444c23-c07955d1988-132959c094-9e1ad8-815.png\"\n" +
+                "        },\n" +
+                "        \"joined\": {\n" +
+                "            \"approx\": \"2 hours ago\",\n" +
+                "            \"formatted\": \"Sat 04 Apr 2020\",\n" +
+                "            \"exact\": \"2020-04-04T09:38:28.000000Z\",\n" +
+                "            \"time\": \"09:38\"\n" +
+                "        }\n" +
+                "    },\n" +
+                "    \"processing_image\": false\n" +
+                "}";
+
+        User user = new User("c2582401-7c7a-404d-9d56-99a754f4ce27", "User Name", new Avatar("","", "", ""), "null", "null", "null", false, true, new Date("", "", "", ""));
+        GoodPrefs.getInstance().saveObject(Constants.USER, user);
     }
 }

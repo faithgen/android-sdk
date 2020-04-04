@@ -202,7 +202,6 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
 
                         @Override
                         public void onError(ErrorResponse errorResponse) {
-                            //super.onError(errorResponse);
                             Dialogs.showOkDialog(context, errorResponse.getMessage(), false);
                         }
                     });
@@ -220,8 +219,13 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
         commentField.setText("");
         Toast.makeText(context, response.getMessage(), Toast.LENGTH_SHORT).show();
         comments.add(response.getComment());
-        commentsView.smoothScrollToPosition(comments.size() - 1);
-        initNoComments();
+        if(comments.size() == 1){
+            adapter = new CommentsAdapter(context, comments);
+            commentsView.setAdapter(adapter);
+        }else{
+            adapter.notifyDataSetChanged();
+            commentsView.smoothScrollToPosition(comments.size() - 1);
+        }
     }
 
     /**
