@@ -3,6 +3,7 @@ package net.faithgen.sdk.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class CommentView extends LinearLayout {
     private TextView userCommentView;
     private TextView commentTimeView;
     private CircleImageView circularImageView;
+    private CircleImageView meImageView;
     private LinearLayout commentlayout;
     private String userName;
     private String userComment;
@@ -54,6 +56,7 @@ public class CommentView extends LinearLayout {
         userCommentView = findViewById(R.id.user_comment);
         commentTimeView = findViewById(R.id.comment_time);
         circularImageView = findViewById(R.id.user_image);
+        meImageView = findViewById(R.id.me_image);
         commentlayout = findViewById(R.id.comment_layout);
     }
 
@@ -113,11 +116,15 @@ public class CommentView extends LinearLayout {
         if (comment.getCreator().is_admin())
             commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_admin_background));
 
-        if (SDK.getUser() == null)
+        if (SDK.getUser() == null || !SDK.getUser().getId().equals(comment.getCreator().getId()))
             setUserName(comment.getCreator().getName());
-        else if(SDK.getUser().getId().equals(comment.getCreator().getId())){
+        else {
             setUserName(comment.getCreator().getName() + " (you)");
-            commentlayout.setBackground(getResources().getDrawable(R.drawable.chat_admin_background));
+            getUserNameView().setGravity(Gravity.END);
+            commentlayout.setBackground(getResources().getDrawable(R.drawable.me_chat_background));
+
+            getCircularImageView().setVisibility(INVISIBLE);
+            meImageView.setVisibility(VISIBLE);
         }
 
         setUserComment(comment.getComment());
@@ -128,5 +135,11 @@ public class CommentView extends LinearLayout {
                 .error(R.drawable.commenter)
                 .placeholder(R.drawable.commenter)
                 .into(getCircularImageView());
+
+        Picasso.get()
+                .load(comment.getCreator().getAvatar().get_50())
+                .error(R.drawable.commenter)
+                .placeholder(R.drawable.commenter)
+                .into(meImageView);
     }
 }
