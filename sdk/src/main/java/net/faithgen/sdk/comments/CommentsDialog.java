@@ -45,9 +45,15 @@ public class CommentsDialog extends DialogFullScreen {
         super.onStart();
         dialogToolbar.setTitle(commentsSettings.getTitle());
         if (commentsUtil.getComments() == null){
-            commentsUtil.connectPusher();
             commentsUtil.loadComments(commentsSettings.getCommentsRoute());
         }
-        //todo load comments
+        commentsUtil.connectPusher();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        commentsUtil.commentsChannel.unbind(commentsUtil.getChannel(), null);
+        commentsUtil.pusher.disconnect();
     }
 }

@@ -94,7 +94,7 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
     }
 
     /**
-     * Connects to the websocoket to wire instant messaging.
+     * Connects to the websocket to wire instant messaging.
      */
     void connectPusher() {
         pusher.connect(new ConnectionEventListener() {
@@ -339,7 +339,7 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
      *
      * @return
      */
-    private String getChannel() {
+    public String getChannel() {
         return "private-comments-" + commentsSettings.getCategory().replace("/", "-" + commentsSettings.getItemId());
     }
 }
