@@ -62,7 +62,25 @@ class TestPusher : AppCompatActivity() {
             }
         }, ConnectionState.ALL)
 
-        subscribeToAllChannels()
+        //subscribeToAllChannels()
+
+        val commentsChannel = pusher.subscribePrivate("private-comments-sermons--5-3e4c7f160-b5191986fb06-be8fe23ad2")
+
+        commentsChannel.bind("comment.created", object : PrivateChannelEventListener {
+            override fun onEvent(event: PusherEvent?) {
+                updateStatus("FROM MY EVENT")
+                updateStatus(event!!.data, "From Event message")
+            }
+
+            override fun onAuthenticationFailure(message: String?, e: java.lang.Exception?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onSubscriptionSucceeded(channelName: String?) {
+                updateStatus("Subsrcibed custom successfully")
+            }
+        })
+
     }
 
     private fun subscribeToAllChannels() {
