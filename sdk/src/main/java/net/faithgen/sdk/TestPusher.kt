@@ -5,6 +5,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.pusher.client.Pusher
 import com.pusher.client.PusherOptions
+import com.pusher.client.channel.PrivateChannel
+import com.pusher.client.channel.PrivateChannelEventListener
+import com.pusher.client.channel.PusherEvent
 import com.pusher.client.connection.ConnectionEventListener
 import com.pusher.client.connection.ConnectionState
 import com.pusher.client.connection.ConnectionStateChange
@@ -14,6 +17,18 @@ import kotlinx.android.synthetic.main.activity_test_pusher.*
 class TestPusher : AppCompatActivity() {
 
     private val authorizer: HttpAuthorizer by lazy { HttpAuthorizer("http://192.168.8.101:8001/laravel-websockets/auth") }
+
+    private val channels: List<String> = listOf(
+            "disconnection",
+            "connection",
+            "vacated",
+            "occupied",
+            "subscribed",
+            "client-message",
+            "api-message"
+    )
+
+    private var status = ""
 
     private val pusherOptions: PusherOptions by lazy {
         authorizer.setHeaders(mapOf(Pair("X-App-ID", "myId")))
@@ -46,10 +61,34 @@ class TestPusher : AppCompatActivity() {
                 updateStatus(message!!, "Error")
             }
         }, ConnectionState.ALL)
+
+        subscribeToAllChannels()
+    }
+
+    private fun subscribeToAllChannels() {
+        channels.forEach { channel -> subscribeToChannel(channel) }
+    }
+
+    private fun subscribeToChannel(pusherChannel: String) {
+        val channel: PrivateChannel = pusher.subscribePrivate("private-websockets-dashboard-$pusherChannel")
+        channel.bind("log-message", object : PrivateChannelEventListener {
+            override fun onEvent(event: PusherEvent?) {
+                updateStatus(event.toString(), pusherChannel)
+            }
+
+            override fun onAuthenticationFailure(message: String?, e: java.lang.Exception?) {
+                updateStatus(message!!, "failed auth")
+            }
+
+            override fun onSubscriptionSucceeded(channelName: String?) {
+                updateStatus("Subscription passed", pusherChannel)
+            }
+        })
     }
 
     private fun updateStatus(message: String, operation: String = "change") {
-        statusText.text = message
+        status += message + "\n"
+        runOnUiThread { statusText.text = status }
         Log.d(operation, message)
     }
 }
