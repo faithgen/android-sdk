@@ -1,5 +1,6 @@
 package net.faithgen.androidsdk;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.faithgen.sdk.SDK;
+import net.faithgen.sdk.TestPusher;
 import net.faithgen.sdk.comments.CommentsSettings;
 import net.faithgen.sdk.enums.CommentsDisplay;
 import net.faithgen.sdk.http.FaithGenAPI;
@@ -52,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
                 params.put("second params", "2");
                 //  API.get(MainActivity.this, "https://theroute", params, false, null);
 
-
-                SDK.openComments(MainActivity.this, new CommentsSettings.Builder()
+startActivity(new Intent(MainActivity.this, TestPusher.class));
+/*                 SDK.openComments(MainActivity.this, new CommentsSettings.Builder()
                         .setCategory("sermons/")
                         //.setItemId("-5-3e4c7f160-b5191986fb06-be8fe23ad2")
                         .setItemId("-5-3e4c7f160-b5191986fb06-be8fe23ad2")
@@ -61,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         .setLimit(12)
                         .setCommentsDisplay(CommentsDisplay.DIALOG)
                         .build());
-/*               new FaithGenAPI(MainActivity.this)
+              new FaithGenAPI(MainActivity.this)
                         .setServerResponse(new ServerResponse() {
                             @Override
                             public void onServerResponse(String serverResponse) {
