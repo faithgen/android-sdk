@@ -91,12 +91,11 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
                 .setEncrypted(SDK.getApiBase().contains("https://"));
 
         this.pusher = new Pusher("myKey", pusherOptions);
-
-        Log.d("host", getHost());
-        Log.d("channel", getChannel());
-        Log.d("server", getServer());
     }
 
+    /**
+     * Connects to the websocoket to wire instant messaging.
+     */
     void connectPusher() {
         pusher.connect(new ConnectionEventListener() {
             @Override
@@ -126,9 +125,9 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
 
             @Override
             public void onEvent(PusherEvent event) {
-                Log.d("TAG", "onEvent: " + event.getData());
                 response = GSONSingleton.Companion.getInstance().getGson().fromJson(event.getData(), Response.class);
-                processSuccessfulRequest(response.getComment());
+                if (SDK.getUser() == null || !SDK.getUser().getId().equals(response.getComment().getCreator().getId()))
+                    processSuccessfulRequest(response.getComment());
             }
         });
     }
