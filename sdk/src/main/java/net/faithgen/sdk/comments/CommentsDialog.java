@@ -1,5 +1,6 @@
 package net.faithgen.sdk.comments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ public class CommentsDialog extends DialogFullScreen {
     public CommentsDialog(Context context, CommentsSettings commentsSettings) {
         this.commentsSettings = commentsSettings;
         this.context = context;
-        this.commentsUtil = new CommentsUtil(this.context, this.commentsSettings);
+        this.commentsUtil = new CommentsUtil((Activity) this.context, this.commentsSettings);
     }
 
     @Nullable
@@ -43,8 +44,10 @@ public class CommentsDialog extends DialogFullScreen {
     public void onStart() {
         super.onStart();
         dialogToolbar.setTitle(commentsSettings.getTitle());
-        if (commentsUtil.getComments() == null)
+        if (commentsUtil.getComments() == null){
+            commentsUtil.connectPusher();
             commentsUtil.loadComments(commentsSettings.getCommentsRoute());
+        }
         //todo load comments
     }
 }

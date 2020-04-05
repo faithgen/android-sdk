@@ -40,7 +40,9 @@ public class CommentsActivity extends FaithGenActivity {
     protected void onStart() {
         super.onStart();
         getToolbar().setPageTitle(commentsSettings.getTitle());
-        if(commentsUtil.getComments() == null)
+        if(commentsUtil.getComments() == null){
+commentsUtil.connectPusher();
             commentsUtil.loadComments(commentsSettings.getCommentsRoute());
+        }
     }
 }

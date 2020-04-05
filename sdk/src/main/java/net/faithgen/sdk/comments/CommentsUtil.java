@@ -1,6 +1,8 @@
 package net.faithgen.sdk.comments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.pusher.client.Pusher;
+import com.pusher.client.PusherOptions;
+import com.pusher.client.channel.Channel;
+import com.pusher.client.channel.PrivateChannelEventListener;
+import com.pusher.client.channel.PusherEvent;
+import com.pusher.client.connection.ConnectionEventListener;
+import com.pusher.client.connection.ConnectionState;
+import com.pusher.client.connection.ConnectionStateChange;
+import com.pusher.client.util.HttpAuthorizer;
 
 import net.faithgen.sdk.R;
 import net.faithgen.sdk.SDK;
@@ -35,7 +46,7 @@ import java.util.List;
  * Handles commenting of items
  */
 public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
-    private Context context;
+    private Activity context;
     private CommentsSettings commentsSettings;
     private RelativeLayout signInLayout;
     private RelativeLayout commentLayout;
@@ -50,20 +61,81 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
     private CommentsAdapter adapter;
     private List<Comment> comments;
     private HashMap<String, String> params;
+    private HashMap<String, String> headers;
     private Response response;
     private FaithGenAPI faithGenAPI;
+    private HttpAuthorizer httpAuthorizer;
+    private PusherOptions pusherOptions;
+    public Pusher pusher;
+    public Channel commentsChannel;
 
     public List<Comment> getComments() {
         return comments;
     }
 
-    public CommentsUtil(Context context, CommentsSettings commentsSettings) {
+    public CommentsUtil(Activity context, CommentsSettings commentsSettings) {
         this.context = context;
         this.commentsSettings = commentsSettings;
+
+        headers = new HashMap<>();
+        headers.put("X-App-ID", "myId");
+
+        this.httpAuthorizer = new HttpAuthorizer(getServer() + "/laravel-websockets/auth");
+        this.httpAuthorizer.setHeaders(headers);
+
+        this.pusherOptions = new PusherOptions()
+                .setHost(getHost())
+                .setWsPort(6001)
+                .setWssPort(6001)
+                .setAuthorizer(httpAuthorizer)
+                .setEncrypted(SDK.getApiBase().contains("https://"));
+
+        this.pusher = new Pusher("myKey", pusherOptions);
+
+        Log.d("host", getHost());
+        Log.d("channel", getChannel());
+        Log.d("server", getServer());
+    }
+
+    void connectPusher() {
+        pusher.connect(new ConnectionEventListener() {
+            @Override
+            public void onConnectionStateChange(ConnectionStateChange change) {
+
+            }
+
+            @Override
+            public void onError(String message, String code, Exception e) {
+
+            }
+        }, ConnectionState.ALL);
+
+        commentsChannel = pusher.subscribePrivate("private-comments-sermons--5-3e4c7f160-b5191986fb06-be8fe23ad2");
+
+        //bind comment created
+        commentsChannel.bind("comment.created", new PrivateChannelEventListener() {
+            @Override
+            public void onAuthenticationFailure(String message, Exception e) {
+
+            }
+
+            @Override
+            public void onSubscriptionSucceeded(String channelName) {
+
+            }
+
+            @Override
+            public void onEvent(PusherEvent event) {
+                Log.d("TAG", "onEvent: " + event.getData());
+                response = GSONSingleton.Companion.getInstance().getGson().fromJson(event.getData(), Response.class);
+                processSuccessfulRequest(response.getComment());
+            }
+        });
     }
 
     /**
      * Initialized the views used for commenting
+     *
      * @param view
      */
     public void initViews(View view) {
@@ -103,6 +175,7 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
 
     /**
      * This loads the item comments from the server
+     *
      * @param url The source of the comments
      */
     public void loadComments(String url) {
@@ -119,7 +192,6 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
 
                     @Override
                     public void onError(ErrorResponse errorResponse) {
-                        //super.onError(errorResponse);
                         swipeRefreshLayout.setRefreshing(false);
                         Dialogs.showOkDialog(context, errorResponse.getMessage(), false);
                         noComments.setText(errorResponse.getMessage());
@@ -131,6 +203,7 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
     /**
      * This coverts the comments into native objects
      * and then render them on the selected view
+     *
      * @param serverResponse
      */
     private void populateComments(String serverResponse) {
@@ -196,7 +269,8 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
                         public void onServerResponse(String serverResponse) {
                             response = GSONSingleton.Companion.getInstance().getGson().fromJson(serverResponse, Response.class);
                             if (response.getSuccess()) {
-                                processSuccessfulRequest(response);
+                                Toast.makeText(context, response.getMessage(), Toast.LENGTH_SHORT).show();
+                                processSuccessfulRequest(response.getComment());
                             } else Dialogs.showOkDialog(context, response.getMessage(), false);
                         }
 
@@ -213,18 +287,20 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
      * This processes the response from the server when a
      * comment is sent successfully
      *
-     * @param response
+     * @param comment
      */
-    private void processSuccessfulRequest(Response response) {
+    private void processSuccessfulRequest(Comment comment) {
         commentField.setText("");
-        Toast.makeText(context, response.getMessage(), Toast.LENGTH_SHORT).show();
-        comments.add(response.getComment());
-        if(comments.size() == 1){
+        comments.add(comment);
+
+        if (comments.size() == 1) {
             adapter = new CommentsAdapter(context, comments);
             commentsView.setAdapter(adapter);
-        }else{
-            adapter.notifyDataSetChanged();
-            commentsView.smoothScrollToPosition(comments.size() - 1);
+        } else {
+            context.runOnUiThread(() -> {
+                adapter.notifyDataSetChanged();
+                commentsView.smoothScrollToPosition(comments.size() - 1);
+            });
         }
     }
 
@@ -237,5 +313,34 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
             swipeRefreshLayout.setRefreshing(false);
             Toast.makeText(context, Constants.REACHED_END, Toast.LENGTH_SHORT).show();
         } else loadComments(pagination.getLinks().getNext());
+    }
+
+    /**
+     * Get the server host.
+     *
+     * @return
+     */
+    private String getHost() {
+        return getServer().replace(":8001", "")
+                .replace("http://", "")
+                .replace("https://", "");
+    }
+
+    /**
+     * Gets the server running the API.
+     *
+     * @return
+     */
+    private String getServer() {
+        return SDK.getApiBase().replace("/api/", "");
+    }
+
+    /**
+     * Get the channel to subscribe to.
+     *
+     * @return
+     */
+    private String getChannel() {
+        return "private-comments-" + commentsSettings.getCategory().replace("/", "-" + commentsSettings.getItemId());
     }
 }
