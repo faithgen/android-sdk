@@ -2,6 +2,7 @@ package net.faithgen.sdk.comments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -32,6 +33,7 @@ import net.faithgen.sdk.http.ErrorResponse;
 import net.faithgen.sdk.http.FaithGenAPI;
 import net.faithgen.sdk.http.Pagination;
 import net.faithgen.sdk.http.Response;
+import net.faithgen.sdk.http.TypingResponse;
 import net.faithgen.sdk.http.types.ServerResponse;
 import net.faithgen.sdk.models.Comment;
 import net.faithgen.sdk.singletons.GSONSingleton;
@@ -53,6 +55,7 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
     private Button signIn;
     private FloatingActionButton commentFAB;
     private TextView noComments;
+    private TextView typingStatus;
     private EditText commentField;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView commentsView;
@@ -139,6 +142,38 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
                     processSuccessfulRequest(response.getComment());
             }
         });
+
+        commentsChannel.bind("user.typing", new PrivateChannelEventListener() {
+            @Override
+            public void onAuthenticationFailure(String message, Exception e) {
+
+            }
+
+            @Override
+            public void onSubscriptionSucceeded(String channelName) {
+
+            }
+
+            @Override
+            public void onEvent(PusherEvent event) {
+                TypingResponse typingResponse = GSONSingleton.Companion.getInstance().getGson().fromJson(event.getData(), TypingResponse.class);
+                if (SDK.getUser() == null || !SDK.getUser().getId().equals(typingResponse.getUser().getId()))
+                    registerUserTyping(typingResponse);
+            }
+        });
+    }
+
+    /**
+     * Shows who is typing.
+     *
+     * @param typingResponse
+     */
+    private void registerUserTyping(TypingResponse typingResponse) {
+        context.runOnUiThread(() -> {
+            typingStatus.setVisibility(View.VISIBLE);
+            typingStatus.setText(typingResponse.getStatus() + " ...");
+            new Handler().postDelayed(() -> typingStatus.setVisibility(View.GONE), 2550);
+        });
     }
 
     /**
@@ -155,6 +190,7 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
         commentsView = view.findViewById(R.id.commentsView);
         noComments = view.findViewById(R.id.no_comments);
+        typingStatus = view.findViewById(R.id.typingStatus);
 
         swipeRefreshLayout.setPullPosition(Gravity.TOP);
         commentsView.setLayoutManager(new LinearLayoutManager(context));

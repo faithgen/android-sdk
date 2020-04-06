@@ -35,6 +35,15 @@
 
     </net.innoflash.iosview.swipelib.SwipeRefreshLayout>
 
+    <TextView
+        android:id="@+id/typingStatus"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:text="@string/loading"
+        android:textColor="@color/ios_blue"
+        android:paddingLeft="@dimen/dimen10"
+        android:fontFamily="sans-serif-smallcaps"
+        android:layout_height="wrap_content"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
