@@ -53,7 +53,7 @@ public class CommentsDialog extends DialogFullScreen {
     @Override
     public void onStop() {
         super.onStop();
-        commentsUtil.commentsChannel.unbind(commentsUtil.getChannel(), null);
-        commentsUtil.pusher.disconnect();
+        commentsUtil.getCommentsChannel().unbind(commentsUtil.getChannel(), null);
+        commentsUtil.getPusher().disconnect();
     }
 }

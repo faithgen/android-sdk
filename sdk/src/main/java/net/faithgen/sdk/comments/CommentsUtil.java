@@ -66,8 +66,17 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
     private FaithGenAPI faithGenAPI;
     private HttpAuthorizer httpAuthorizer;
     private PusherOptions pusherOptions;
-    public Pusher pusher;
-    public Channel commentsChannel;
+
+    public Pusher getPusher() {
+        return pusher;
+    }
+
+    public Channel getCommentsChannel() {
+        return commentsChannel;
+    }
+
+    private Pusher pusher;
+    private Channel commentsChannel;
 
     public List<Comment> getComments() {
         return comments;
