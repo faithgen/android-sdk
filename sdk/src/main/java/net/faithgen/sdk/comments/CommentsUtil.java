@@ -3,6 +3,8 @@ package net.faithgen.sdk.comments;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -47,7 +49,7 @@ import java.util.List;
 /**
  * Handles commenting of items
  */
-public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener {
+public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener, TextWatcher {
     private Activity context;
     private CommentsSettings commentsSettings;
     private RelativeLayout signInLayout;
@@ -215,6 +217,7 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
         commentFAB.setOnClickListener(v -> sendComment());
         signIn.setOnClickListener(v -> signInProfile());
         swipeRefreshLayout.setOnRefreshListener(this);
+        commentField.addTextChangedListener(this);
     }
 
     /**
@@ -386,5 +389,31 @@ public final class CommentsUtil implements SwipeRefreshLayout.OnRefreshListener 
      */
     public String getChannel() {
         return "private-comments-" + commentsSettings.getCategory().replace("/", "-" + commentsSettings.getItemId());
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if (charSequence.length() == 1){
+            HashMap<String, String> typingParams = new HashMap<>();
+            typingParams.put("item_id", commentsSettings.getItemId());
+            typingParams.put("category", commentsSettings.getCategory().replace("/", ""));
+            typingParams.put("coming_in", "1");
+
+            faithGenAPI
+                    .setParams(typingParams)
+                    .setIsSilentCall(true)
+                    .setServerResponse(null)
+                    .request("comments/typing");
+        }
+    }
+
+    @Override
+    public void afterTextChanged(Editable editable) {
+
     }
 }
