@@ -39,6 +39,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.pusher:pusher-java-client:2.0.2'
+    api project(':richlinkpreview')
     api 'com.github.innoflash:iOSViews:6b8527d4b6' //iOSViews (custom)
     api 'com.google.code.gson:gson:2.8.5' //data serialization
     api 'org.itishka.gson-flatten:gson-flatten:0.8.1' //GSON helper
